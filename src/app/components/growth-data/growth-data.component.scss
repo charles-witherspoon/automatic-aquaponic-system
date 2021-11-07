@@ -1,0 +1,52 @@
+.content {
+    padding: 1rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+
+.container {
+    padding-top: 1rem;
+}
+
+
+.fields {
+    font-size: 1.4rem;
+}
+
+.plants, .fields {
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+    border-radius: 8px;
+}
+
+.plants > *, .fields > * {
+    margin-right: 1rem;
+}
+
+.name {
+    min-width: 7vw;
+}
+
+.date {
+    width: 10vw;
+}
+
+.growth {
+    width: 5vw;
+    margin-left: 2rem;
+}
+
+button {
+    background-color: var(--primary-button-color);
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    text-shadow: 1px 1px var(--primary-background-color);
+    padding: 0.2rem 1.4rem;
+}

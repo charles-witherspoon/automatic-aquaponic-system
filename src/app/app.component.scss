@@ -1,0 +1,40 @@
+/** App container */
+.container {
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/** Header */
+.header {
+    flex: 1;
+    justify-content: space-between;
+}
+
+.menu a {
+    color: var(--light-text-color);
+    text-decoration: none;
+    margin: 0 1.4rem;
+}
+
+.app-title {
+    font-size: 1.8rem;
+}
+
+/** Main Content */
+
+.main-content {
+    flex: 10;
+}
+
+.side-nav {
+    width: 15%;
+}
+
+.side-nav button {
+    display: block;
+    min-width: 80%;    
+    margin: 1rem auto;
+    background-color: var(--primary-button-color);
+}

@@ -1,0 +1,41 @@
+:root {
+    
+    /* Custom Colors */
+    --primary-background-color: #edf6ff;
+    --light-background-color: #fff;
+    
+    --primary-color: #6daffe;
+    --secondary-color: #437fc7;
+
+    --light-text-color: #fff;
+    --dark-text-color: var(--secondary-color);
+
+    --primary-button-color: #c2edce;
+
+}
+
+/** Global Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body { 
+    height: 100%; 
+}
+
+body { 
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--primary-background-color);
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-select-placeholder {
+    color: black;
+}
