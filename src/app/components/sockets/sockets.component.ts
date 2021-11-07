@@ -1,71 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
+import { SOCKET_TYPE, SOCKET_STATUS, MOCK_SOCKETS } from 'src/app/models/socket';
 
-enum TYPES {
-  WATER_PUMP = "WATER PUMP",
-  LIGHT = "LIGHT",
-  AERATOR = "AERATOR",
-  HEATER = "HEATER",
-  NONE = "NONE",
-};
-
-enum STATUS {
-  ON = "ON",
-  OFF = "OFF",
-  UNUSED = "UNUSED",
-};
-
-var SOCKETS = [
-  {
-    id: 1,
-    type: TYPES.HEATER,
-    schedule: {},
-    status: STATUS.ON,
-  },
-  {
-    id: 2,
-    type: TYPES.WATER_PUMP,
-    schedule: {},
-    status: STATUS.OFF,
-  },
-  {
-    id: 3,
-    type: TYPES.LIGHT,
-    schedule: {},
-    status: STATUS.OFF,
-  },
-  {
-    id: 4,
-    type: TYPES.NONE,
-    schedule: {},
-    status: STATUS.UNUSED,
-  },
-  {
-    id: 5,
-    type: TYPES.NONE,
-    schedule: {},
-    status: STATUS.UNUSED,
-  },
-  {
-    id: 6,
-    type: TYPES.NONE,
-    schedule: {},
-    status: STATUS.UNUSED,
-  },
-  {
-    id: 7,
-    type: TYPES.NONE,
-    schedule: {},
-    status: STATUS.UNUSED,
-  },
-  {
-    id: 8,
-    type: TYPES.NONE,
-    schedule: {},
-    status: STATUS.UNUSED,
-  },
-];
 
 @Component({
   selector: 'app-sockets',
@@ -78,11 +15,11 @@ export class SocketsComponent implements OnInit {
 
   public currentSocket: any = null;
 
-  public sockets: any = SOCKETS;
+  public sockets: any = MOCK_SOCKETS;
 
-  public types: any = TYPES;
+  public types: any = SOCKET_TYPE;
 
-  public statuses: any = STATUS;
+  public statuses: any = SOCKET_STATUS;
 
   public socketsForm: FormGroup = new FormGroup({});
   //#endregion
@@ -92,7 +29,7 @@ export class SocketsComponent implements OnInit {
 
   ngOnInit(): void {
     let group: any = {}
-    SOCKETS.forEach(socket => {
+    MOCK_SOCKETS.forEach(socket => {
       group[`socket${socket.id}_type`] = new FormControl(socket.type);
       group[`socket${socket.id}_status`] = new FormControl(socket.status);
     })
@@ -102,23 +39,14 @@ export class SocketsComponent implements OnInit {
 
 
   //#region Public Methods
-
-  public changeType(id: number): void {
-
-  }
-
-  public onSelect() {
-
-  }
-
   public setType(event: MatSelectChange, socket: any): void {
-    let typedString = event.value as keyof typeof TYPES;
-    socket.type = TYPES[typedString];
+    let typedString = event.value as keyof typeof SOCKET_TYPE;
+    socket.type = SOCKET_TYPE[typedString];
   }
 
   public setStatus(event: MatSelectChange, socket: any): void {
-    let typedString = event.value as keyof typeof STATUS;
-    socket.status = STATUS[typedString];
+    let typedString = event.value as keyof typeof SOCKET_STATUS;
+    socket.status = SOCKET_STATUS[typedString];
   }
   public onSave(): void {
     console.log('save')

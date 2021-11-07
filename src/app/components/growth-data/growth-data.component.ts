@@ -1,28 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MOCK_PLANTS } from 'src/app/models/plants';
 
-const PLANTS = [
-  {
-    name: "Plant A",
-    growthData: [],
-  },
-  {
-    name: "Plant B",
-    growthData: [],
-  },
-  {
-    name: "Plant C",
-    growthData: [],
-  },
-  {
-    name: "Plant D",
-    growthData: [],
-  },
-  {
-    name: "Plant E",
-    growthData: [],
-  },
-];
 
 @Component({
   selector: 'app-growth-data',
@@ -33,7 +12,7 @@ export class GrowthDataComponent implements OnInit {
 
   //#region Private Properties
 
-  public plants: any = PLANTS;
+  public plants: any = MOCK_PLANTS;
 
   public plantsForm: FormGroup = new FormGroup({});
   //#endregion
