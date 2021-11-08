@@ -1,7 +1,9 @@
 <?php
+header('Access-Control-Allow-Headers: Access-Control-Allow-Origin, Content-Type');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-class Plant {
+class Plant implements JsonSerializable {
     private $_id;
     private $_name;
     private $_growthData;
@@ -12,8 +14,12 @@ class Plant {
         $this->_growthData = $growthData;
     }
 
-    public function __toString() {
-        return "{id: $this->_id, name: $this->_name, growthData:$this->_growthData}";
+    public function jsonSerialize() {
+        return [
+            'id' => $this->_id,
+            'name' => $this->_name,
+            'growthData' => $this->_growthData,
+        ];
     }
 
     public function getId() {
@@ -35,6 +41,7 @@ class Plant {
     public function getGrowthData() {
         return $this->_growthData;
     }
+
 }
 
 class PlantDataAccess {
@@ -102,13 +109,13 @@ function handleGet($plantDB) {
     // GET: Get plant by ID
     $id = $_GET['id'];
     if ($id) {
-        echo $plantDB->getPlant($id);
+        echo json_encode($plantDB->getPlant($id));
     } 
 
     // GET: Get all plants
     else {
         $plants = $plantDB->getPlants();
-        echo '[' . implode(",", $plants) . ']';
+        echo json_encode($plants);
     }
 }
 
@@ -151,3 +158,6 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     handleDelete($plantDB);
 }
+
+
+$db->close();

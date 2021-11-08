@@ -13,7 +13,7 @@ export enum SOCKET_STATUS {
 }
 
 export interface Socket {
-    id: number,
+    id?: number,
     type: SOCKET_TYPE,
     schedule: any,
     status: SOCKET_STATUS

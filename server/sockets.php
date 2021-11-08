@@ -1,7 +1,9 @@
 <?php
+header('Access-Control-Allow-Headers: Access-Control-Allow-Origin, Content-Type');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-class Socket {
+class Socket implements JsonSerializable {
     private $_id;
     private $_type;
     private $_schedule;
@@ -12,6 +14,15 @@ class Socket {
         $this->_type = $type;
         $this->_schedule = $schedule;
         $this->_status = $status;
+    }
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->_id,
+            'type' => $this->_type,
+            'schedule' => $this->_schedule,
+            'status' => $this->_status
+        ];
     }
 
 
@@ -42,10 +53,6 @@ class Socket {
     public function getStatus() {
         return $this->_status;
     }
-
-    public function __toString() {
-        return "{id: $this->_id, type: $this->_type, schedule: $this->_schedule, status: $this->_status}";
-    }
 }
 
 class SocketDataAccess {
@@ -60,14 +67,7 @@ class SocketDataAccess {
         // Initialized to default if empty
         $count = $db->querySingle("SELECT COUNT(*) as count FROM sockets");
         if ($count == 0) {
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED');");
+            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED'), ('NONE', '{}', 'UNUSED');");
         }
         $count = $db->querySingle("SELECT COUNT(*) as count FROM sockets");
     }
@@ -113,13 +113,13 @@ function handleGet($socketDB) {
     // GET: Get all sockets
     if (empty($_GET)) {
         $sockets = $socketDB->getSockets();
-        echo '[' . implode(",", $sockets) . ']';
-    }
-
-    // GET: Get socket by ID
-    $id = $_GET['id'];
-    if ($id) {
-        echo $socketDB->getSocket($id);
+        echo json_encode($sockets);
+    } else {
+        // GET: Get socket by ID
+        $id = $_GET['id'];
+        if ($id) {
+            echo json_encode($socketDB->getSocket($id));
+        }
     }
 }
 
@@ -137,14 +137,22 @@ function handlePost($socketDB) {
 
 
 $db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
+$db->busyTimeout(3000);
 $socketDB = new SocketDataAccess($db);
 
-// Handle GET
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    handleGet($socketDB);
-}
+try {
+    // Handle GET
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        handleGet($socketDB);
+    }
 
-// Handle POST
-elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    handlePost($socketDB);
+    // Handle POST
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        handlePost($socketDB);
+    }
+} catch (Exception $e) {
+    echo 'Caught exception: ', $e->getMessage(), "\n";
+} finally {
+    $db->close();
+    unset($db);
 }

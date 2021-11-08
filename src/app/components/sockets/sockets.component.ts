@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder, FormArray, AbstractControlDirective } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
-import { SOCKET_TYPE, SOCKET_STATUS, MOCK_SOCKETS } from 'src/app/models/socket';
+import { SOCKET_TYPE, SOCKET_STATUS, Socket } from 'src/app/models/socket';
+import { SocketService } from './socket.service';
 
 
 @Component({
@@ -12,33 +13,47 @@ import { SOCKET_TYPE, SOCKET_STATUS, MOCK_SOCKETS } from 'src/app/models/socket'
 export class SocketsComponent implements OnInit {
 
   //#region Private Properties
-
-  public currentSocket: any = null;
-
-  public sockets: any = MOCK_SOCKETS;
+  public sockets: Socket[] = [];
 
   public types: any = SOCKET_TYPE;
 
   public statuses: any = SOCKET_STATUS;
 
-  public socketsForm: FormGroup = new FormGroup({});
+  public socketsForm: FormGroup;
   //#endregion
 
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private socketService: SocketService, private fb: FormBuilder) {
+    this.socketsForm = this.fb.group({
+      sockets: this.fb.array([])
+    });
+  }
+
+  private addSocketGroup(socket: Socket): FormGroup {
+    return this.fb.group({
+      type: new FormControl(socket.type),
+      status: new FormControl(socket.status)
+    });
+  }
 
   ngOnInit(): void {
-    let group: any = {}
-    MOCK_SOCKETS.forEach(socket => {
-      group[`socket${socket.id}_type`] = new FormControl(socket.type);
-      group[`socket${socket.id}_status`] = new FormControl(socket.status);
-    })
+    this.socketService.getSockets().subscribe(sockets => {
+      this.sockets = sockets;
 
-    this.socketsForm = new FormGroup(group);
+      this.sockets.forEach(socket => {
+        let sockets = this.socketsForm.get('sockets') as FormArray;
+        sockets.push(this.addSocketGroup(socket));
+      })
+    });
   }
 
 
   //#region Public Methods
+
+  public populateSockets(): void {
+    this.socketService.getSockets().subscribe(sockets => this.sockets = sockets);
+  }
+
   public setType(event: MatSelectChange, socket: any): void {
     let typedString = event.value as keyof typeof SOCKET_TYPE;
     socket.type = SOCKET_TYPE[typedString];
@@ -48,9 +63,27 @@ export class SocketsComponent implements OnInit {
     let typedString = event.value as keyof typeof SOCKET_STATUS;
     socket.status = SOCKET_STATUS[typedString];
   }
+
   public onSave(): void {
-    console.log('save')
+    let form = this.socketsForm.get('sockets') as FormArray;
+
+    let sockets: any[] = form['controls'];
+
+    if (sockets) {
+      for (let i = 0; i < sockets.length; i++) {
+        let controls = sockets[i]['controls'];
+        let socket: any = {
+          id: i + 1,
+          type: controls['type'].value,
+          schedule: '{}',
+          status: controls['status'].value
+        }
+
+        this.socketService.updateSocket(socket);
+      }
+    }
   }
+
   //#endregion
 
 }
