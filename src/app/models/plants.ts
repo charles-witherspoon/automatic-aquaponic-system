@@ -5,7 +5,7 @@ export interface GrowthData {
 
 export interface Plant {
     id?: number,
-    name: string,
+    name?: string,
     growthData: GrowthData[]
 }
 

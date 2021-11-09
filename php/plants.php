@@ -96,6 +96,41 @@ class PlantDataAccess {
 
         $statement->execute();
     }
+
+    function addGrowthData($plant) {
+        $growthData = $this->getGrowthData($plant->id);
+        if ($growthData) {
+            // Append to comma separated list
+            $growthData = $growthData . ' | ';
+        } 
+
+        $growthData = $growthData . $this->parseGrowthData($plant->growthData);
+
+        $this->saveGrowthData($plant->id, $growthData);
+    }
+
+    function parseGrowthData($data) {
+        return '{ "date": ' . $data->date . ', "growth": ' . $data->growth . ' }';
+    }
+
+    function saveGrowthData($id, $data) {
+        $statement = $this->_db->prepare('UPDATE plants SET growthData = :growthData WHERE id = :id');
+        $statement->bindValue(':growthData', $data);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+    }
+
+    function getGrowthData($id) {
+        $statement = $this->_db->prepare('SELECT growthData FROM plants WHERE id = :id');
+        $statement->bindValue(':id', $id);
+        
+        $result = $statement->execute();
+        $row = $result->fetchArray();
+        if ($row) {
+            return $row['growthData'];
+        }
+        return null;
+    }
    
     function deletePlant($id) {
         $statement = $this->_db->prepare('DELETE FROM plants WHERE id = :id;');
@@ -107,8 +142,8 @@ class PlantDataAccess {
 
 function handleGet($plantDB) {
     // GET: Get plant by ID
-    $id = $_GET['id'];
-    if ($id) {
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
         echo json_encode($plantDB->getPlant($id));
     } 
 
@@ -124,7 +159,10 @@ function handlePost($plantDB) {
     $plant = json_decode($json);
 
     // POST: Update plant
-    if (isset($plant->id)) {
+    if (isset($plant->id) && !isset($plant->name)) {
+        $plantDB->addGrowthData($plant);
+    }
+    elseif (isset($plant->id)) {
         $plantDB->updatePlant($plant);
     }
     // POST: Add new plant

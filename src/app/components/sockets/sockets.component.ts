@@ -13,6 +13,10 @@ import { SocketService } from './socket.service';
 export class SocketsComponent implements OnInit {
 
   //#region Private Properties
+  private _socketUpdates: any = {};
+  //#endregion
+
+  //#region Private Properties
   public sockets: Socket[] = [];
 
   public types: any = SOCKET_TYPE;
@@ -29,13 +33,6 @@ export class SocketsComponent implements OnInit {
     });
   }
 
-  private addSocketGroup(socket: Socket): FormGroup {
-    return this.fb.group({
-      type: new FormControl(socket.type),
-      status: new FormControl(socket.status)
-    });
-  }
-
   ngOnInit(): void {
     this.socketService.getSockets().subscribe(sockets => {
       this.sockets = sockets;
@@ -47,41 +44,58 @@ export class SocketsComponent implements OnInit {
     });
   }
 
-
-  //#region Public Methods
-
-  public populateSockets(): void {
-    this.socketService.getSockets().subscribe(sockets => this.sockets = sockets);
+  private addSocketGroup(socket: Socket): FormGroup {
+    return this.fb.group({
+      type: new FormControl(socket.type),
+      status: new FormControl(socket.status)
+    });
   }
 
+  //#region Public Methods
   public setType(event: MatSelectChange, socket: any): void {
+    // Update socket type
     let typedString = event.value as keyof typeof SOCKET_TYPE;
     socket.type = SOCKET_TYPE[typedString];
+
+    // Cache update
+    let update: Socket = this._socketUpdates[socket.id]
+    if (update) {
+      update.type = socket.type;
+    } else {
+      update = {
+        id: socket.id,
+        type: socket.type,
+        schedule: '',
+        status: SOCKET_STATUS.OFF
+      }
+      this._socketUpdates[socket.id] = update;
+    }
   }
 
   public setStatus(event: MatSelectChange, socket: any): void {
+    // Update socket status
     let typedString = event.value as keyof typeof SOCKET_STATUS;
     socket.status = SOCKET_STATUS[typedString];
+
+    // Cache update
+    let update: Socket = this._socketUpdates[socket.id];
+    if (update) {
+      update.status = socket.status;
+    } else {
+      update = {
+        id: socket.id,
+        type: SOCKET_TYPE.NONE,
+        schedule: '',
+        status: socket.status
+      }
+      this._socketUpdates[socket.id] = update;
+    }
   }
 
   public onSave(): void {
-    let form = this.socketsForm.get('sockets') as FormArray;
-
-    let sockets: any[] = form['controls'];
-
-    if (sockets) {
-      for (let i = 0; i < sockets.length; i++) {
-        let controls = sockets[i]['controls'];
-        let socket: any = {
-          id: i + 1,
-          type: controls['type'].value,
-          schedule: '{}',
-          status: controls['status'].value
-        }
-
-        this.socketService.updateSocket(socket);
-      }
-    }
+    Object.keys(this._socketUpdates).forEach(id => {
+      this.socketService.updateSocket(this._socketUpdates[id]);
+    });
   }
 
   //#endregion

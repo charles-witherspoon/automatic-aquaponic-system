@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Plant } from 'src/app/models/plants';
+import { GrowthData, Plant } from 'src/app/models/plants';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +31,17 @@ export class GrowthDataService {
   public deletePlant(id: number): void {
     let params: HttpParams = new HttpParams().set('id', id);
     this.http.delete(this.GROWTH_DATA_URL, { params: params }).subscribe(_ => this.fetchPlants());
+  }
+
+  public updatePlant(id: number | string, data: GrowthData): void {
+    let update: any = {
+      id: id,
+      growthData: data
+    }
+
+    console.log(update);
+
+    this.http.post<any>(this.GROWTH_DATA_URL, update)
+      .subscribe();
   }
 }

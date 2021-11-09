@@ -8,8 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'automated-aquaponic-system';
 
-  // content = 'SOCKETS';
-  content = 'GROWTH_DATA';
+  content = 'SOCKETS';
+  // content = 'GROWTH_DATA';
 
   public setContent(content: string) {
     this.content = content;

@@ -9,7 +9,6 @@ export enum SOCKET_TYPE {
 export enum SOCKET_STATUS {
     ON = "ON",
     OFF = "OFF",
-    UNUSED = "UNUSED",
 }
 
 export interface Socket {
@@ -42,30 +41,30 @@ export const MOCK_SOCKETS: Socket[] = [
         id: 4,
         type: SOCKET_TYPE.NONE,
         schedule: {},
-        status: SOCKET_STATUS.UNUSED,
+        status: SOCKET_STATUS.OFF,
     },
     {
         id: 5,
         type: SOCKET_TYPE.NONE,
         schedule: {},
-        status: SOCKET_STATUS.UNUSED,
+        status: SOCKET_STATUS.OFF,
     },
     {
         id: 6,
         type: SOCKET_TYPE.NONE,
         schedule: {},
-        status: SOCKET_STATUS.UNUSED,
+        status: SOCKET_STATUS.OFF,
     },
     {
         id: 7,
         type: SOCKET_TYPE.NONE,
         schedule: {},
-        status: SOCKET_STATUS.UNUSED,
+        status: SOCKET_STATUS.OFF,
     },
     {
         id: 8,
         type: SOCKET_TYPE.NONE,
         schedule: {},
-        status: SOCKET_STATUS.UNUSED,
+        status: SOCKET_STATUS.OFF,
     },
 ]
