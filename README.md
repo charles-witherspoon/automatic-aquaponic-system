@@ -1,27 +1,60 @@
 # AutomatedAquaponicSystem
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.1.
+## Deployment Steps
+</br>
 
-## Development server
+### On RaspberryPi
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+</br>
+Update Pi
 
-## Code scaffolding
+```
+sudo apt update
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+sudo apt upgrade
+```
 
-## Build
+Install php and apache2
+```
+sudo apt install php apache2 libapache2-mod-php -y
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+sudo a2enmod mpm_prefork && sudo a2enmod php7.0 && sudo a2enmod rewrite
+```
 
-## Running unit tests
+Add mods for removing .php extension
+```
+sudo perl -i -pe 's/(?<=<VirtualHost \*:80>\n)/\t<Directory \/var\/www\/html>\n\t\tOptions Indexes FollowSymLinks\n\t\tAllowOverride All\n\t\tRequire all granted\n\t<\/Directory>\n/' /etc/apache2/sites-available/000-default.conf
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+echo "RewriteEngine on\nRewriteRule ^sockets$ sockets.php [NC]\nRewriteRule ^plants$ plants.php [NC]" > /var/www/html/.htaccess
+```
+</br>
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### On build machine
+</br>
 
-## Further help
+Download code
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Install git and npm
+```
+git clone https://github.com/charles-witherspoon/automatic-aquaponic-system.git
+```
+Move the files in the automatic-aquaponic-system/php folder to /var/www/html/ on the pi device
+
+Put dist/automatic-aquaponic-system files in /var/www/html/
+```
+npm i -g @angular/cli
+ng build --base-href ./
+```
+
+This generates a dist folder; move the contents of dist/automatic-aquaponic-system to /var/www/html/ on the pi device
+
+</br>
+
+### Back on RasPi
+</br>
+
+Restart Apache server
+```
+sudo service apache2 restart 
+```
