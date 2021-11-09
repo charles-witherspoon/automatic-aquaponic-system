@@ -1,6 +1,7 @@
 <?php
 header('Access-Control-Allow-Headers: Access-Control-Allow-Origin, Content-Type');
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json');
 
 class Plant implements JsonSerializable {
@@ -81,10 +82,9 @@ class PlantDataAccess {
     }
    
    
-    function createPlant($plant) {
-        $statement = $this->_db->prepare('INSERT INTO plants(name, growthData) VALUES (:name, :growthData);');
-        $statement->bindValue(':name', $plant->name);
-        $statement->bindValue(':growthData', $plant->growthData);
+    function createPlant($name) {
+        $statement = $this->_db->prepare('INSERT INTO plants(name) VALUES (:name);');
+        $statement->bindValue(':name', $name);
         $statement->execute();
     }
    
@@ -124,13 +124,12 @@ function handlePost($plantDB) {
     $plant = json_decode($json);
 
     // POST: Update plant
-    $id = $plant->id;
-    if ($id) {
+    if (isset($plant->id)) {
         $plantDB->updatePlant($plant);
     }
     // POST: Add new plant
     else {
-        $plantDB->createPlant($plant);
+        $plantDB->createPlant($plant->name);
     }
     
 }
@@ -141,23 +140,30 @@ function handleDelete($plantDB) {
     $plantDB->deletePlant($id);
 }
 
+
 $db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
+$db->busyTimeout(3000);
 $plantDB = new PlantDataAccess($db);
 
-// Handle GET
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    handleGet($plantDB);
+
+try {
+    // Handle GET
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        handleGet($plantDB);
+    }
+    
+    // Handle POST
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        handlePost($plantDB);
+    }
+    
+    // Handle DELETE
+    elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        handleDelete($plantDB);
+    }
+} catch (Exception $e) {
+    echo 'Caught exception: ', $e->getMessage(), "\n";
+} finally {
+    $db->close();
+    unset($db);
 }
-
-// Handle POST
-elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    handlePost($plantDB);
-}
-
-// Handle DELETE
-elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    handleDelete($plantDB);
-}
-
-
-$db->close();

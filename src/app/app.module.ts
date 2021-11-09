@@ -9,12 +9,16 @@ import { SocketsComponent } from './components/sockets/sockets.component';
 import { GrowthDataComponent } from './components/growth-data/growth-data.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AddPlantDialogComponent } from './components/add-plant-dialog/add-plant-dialog.component';
+import { DeletePlantDialogComponent } from './components/delete-plant-dialog/delete-plant-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SocketsComponent,
     GrowthDataComponent,
+    AddPlantDialogComponent,
+    DeletePlantDialogComponent,
   ],
   imports: [
     BrowserModule,

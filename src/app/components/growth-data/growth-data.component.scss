@@ -2,6 +2,12 @@
     padding: 1rem;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .page-title {
     font-size: 1.8rem;
     font-weight: 500;
@@ -43,10 +49,24 @@
     margin-left: 2rem;
 }
 
-button {
+.save, .add-plant {
     background-color: var(--primary-button-color);
     color: var(--secondary-color);
     font-size: 1.2rem;
     text-shadow: 1px 1px var(--primary-background-color);
     padding: 0.2rem 1.4rem;
+    margin-right: 4rem;
+}
+
+p#no-plants {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    height: 3rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    color: grey;
+}
+
+.delete {
+    margin-left: auto;
 }
