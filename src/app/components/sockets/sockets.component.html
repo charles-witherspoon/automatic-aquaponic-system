@@ -8,6 +8,7 @@
             <span class="id">ID</span>
             <span class="type">Type</span>
             <span class="status">Status</span>
+            <span class="schedule"></span>
         </div>
         <form [formGroup]="socketsForm" (ngSubmit)="onSave()">
             <div *ngFor="let socket of sockets; let i = index;" formArrayName="sockets">
@@ -26,15 +27,18 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field
-                            [ngStyle]="{'background-color' : socket.status === 'ON' ? '#c2edce' : socket.status === 'OFF' ? '#edc2c2' : '#adadad'}"
-                            class="status mat-elevation-z4">
-                            <mat-select (selectionChange)="setStatus($event, socket)" formControlName="status">
-                                <mat-option *ngFor="let status of statuses | keyvalue" [value]="status.value">
-                                    {{ status.value }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <mat-icon *ngIf="socket.status === 'ON'; else powerOff" class="status power"
+                            [ngStyle]="{ 'color': 'green'}" (click)="setStatus('OFF', socket)">
+                            power
+                        </mat-icon>
+                        <ng-template #powerOff>
+                            <mat-icon class="status power" [ngStyle]="{ 'color': 'red'}"
+                                (click)="setStatus('ON', socket)">
+                                power_off
+                            </mat-icon>
+                        </ng-template>
+                        <button mat-raised-button class="schedule" type="button" (click)="setSchedule(socket.id)">Set
+                            Schedule</button>
                     </div>
                 </div>
             </div>

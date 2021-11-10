@@ -50,14 +50,16 @@
 }
 
 .type {
-    flex: 10;
+    flex: 4;
     padding-right: 1rem;
 }
 
 .status {
-    flex: 2;
+    flex: 1;
     padding-right: 1rem;
 }
+
+
 
 div.status, div.socket {
     display: flex;
@@ -86,8 +88,6 @@ button {
     max-height: 30%;
 }
 
-.types {
-}
 
 ::ng-deep span.mat-option-text {
     display: flex;
@@ -101,4 +101,26 @@ button {
 
 ::ng-deep span.mat-option-text:hover mat-icon {
     display: block;
+}
+
+.power{ 
+    min-width: 100px;
+    min-height: 100px;
+    border-radius: 50% !important;
+    font-size: 4rem;
+}
+
+.schedule {
+    flex: 1;
+    margin-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+button.schedule {
+    border: 1px solid lightgrey;
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    text-shadow: none;
+    font-weight: 400;
 }

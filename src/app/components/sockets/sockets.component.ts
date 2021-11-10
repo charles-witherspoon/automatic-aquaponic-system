@@ -5,6 +5,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { SOCKET_TYPE, SOCKET_STATUS, Socket } from 'src/app/models/socket';
 import { AddSocketTypeDialogComponent } from '../add-socket-type-dialog/add-socket-type-dialog.component';
 import { DeleteSocketTypeDialogComponent } from '../delete-socket-type-dialog/delete-socket-type-dialog.component';
+import { SetScheduleDialogComponent } from '../set-schedule-dialog/set-schedule-dialog.component';
 import { SocketService } from './socket.service';
 
 
@@ -73,16 +74,15 @@ export class SocketsComponent implements OnInit {
         id: socket.id,
         type: socket.type,
         schedule: '',
-        status: SOCKET_STATUS.OFF
+        status: socket.status
       }
       this._socketUpdates[socket.id] = update;
     }
   }
 
-  public setStatus(event: MatSelectChange, socket: any): void {
+  public setStatus(status: string, socket: any): void {
     // Update socket status
-    let typedString = event.value as keyof typeof SOCKET_STATUS;
-    socket.status = SOCKET_STATUS[typedString];
+    socket.status = status;
 
     // Cache update
     let update: Socket = this._socketUpdates[socket.id];
@@ -91,7 +91,7 @@ export class SocketsComponent implements OnInit {
     } else {
       update = {
         id: socket.id,
-        type: SOCKET_TYPE.NONE,
+        type: socket.type,
         schedule: '',
         status: socket.status
       }
@@ -112,6 +112,10 @@ export class SocketsComponent implements OnInit {
 
   public deleteSocketType(type: string): void {
     this.dialog.open(DeleteSocketTypeDialogComponent, { data: { type: type } });
+  }
+
+  public setSchedule(id: any) {
+    this.dialog.open(SetScheduleDialogComponent, { data: { id: id } })
   }
 
   //#endregion

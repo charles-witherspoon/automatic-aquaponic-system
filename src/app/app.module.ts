@@ -13,6 +13,7 @@ import { AddPlantDialogComponent } from './components/add-plant-dialog/add-plant
 import { DeletePlantDialogComponent } from './components/delete-plant-dialog/delete-plant-dialog.component';
 import { AddSocketTypeDialogComponent } from './components/add-socket-type-dialog/add-socket-type-dialog.component';
 import { DeleteSocketTypeDialogComponent } from './components/delete-socket-type-dialog/delete-socket-type-dialog.component';
+import { SetScheduleDialogComponent } from './components/set-schedule-dialog/set-schedule-dialog.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { DeleteSocketTypeDialogComponent } from './components/delete-socket-type
     DeletePlantDialogComponent,
     AddSocketTypeDialogComponent,
     DeleteSocketTypeDialogComponent,
+    SetScheduleDialogComponent,
   ],
   imports: [
     BrowserModule,
