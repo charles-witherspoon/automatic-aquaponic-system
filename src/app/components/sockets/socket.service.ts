@@ -12,6 +12,8 @@ export class SocketService {
 
   private sockets: Subject<Socket[]> = new Subject();
 
+  private types: Subject<string[]> = new Subject();
+
   constructor(private http: HttpClient) { }
 
   public getSockets(): Subject<Socket[]> {
@@ -30,5 +32,17 @@ export class SocketService {
   public updateSocket(socketUpdate: Socket): void {
     this.http.post<Socket>(this.SOCKETS_URL, socketUpdate)
       .subscribe();
+  }
+
+  public getSocketTypes(): string[] {
+    return ["WATER PUMP", "LIGHT", "AERATOR", "HEATER", "NONE"];
+  }
+
+  public addSocketType(type: string) {
+    console.log(`added ${type}`);
+  }
+
+  public deleteSocketType(type: string) {
+    console.log(`deleted ${type}`);
   }
 }

@@ -5,6 +5,12 @@
     height: 100%;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .page-title {
     font-size: 1.8rem;
     font-weight: 500;
@@ -78,4 +84,21 @@ button {
 
 .sockets {
     max-height: 30%;
+}
+
+.types {
+}
+
+::ng-deep span.mat-option-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+::ng-deep span.mat-option-text mat-icon {
+    display: none ;
+}
+
+::ng-deep span.mat-option-text:hover mat-icon {
+    display: block;
 }

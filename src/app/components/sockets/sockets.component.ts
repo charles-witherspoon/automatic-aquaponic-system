@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { SOCKET_TYPE, SOCKET_STATUS, Socket } from 'src/app/models/socket';
+import { AddSocketTypeDialogComponent } from '../add-socket-type-dialog/add-socket-type-dialog.component';
+import { DeleteSocketTypeDialogComponent } from '../delete-socket-type-dialog/delete-socket-type-dialog.component';
 import { SocketService } from './socket.service';
 
 
@@ -19,7 +22,7 @@ export class SocketsComponent implements OnInit {
   //#region Private Properties
   public sockets: Socket[] = [];
 
-  public types: any = SOCKET_TYPE;
+  public types: string[] = [];
 
   public statuses: any = SOCKET_STATUS;
 
@@ -27,13 +30,15 @@ export class SocketsComponent implements OnInit {
   //#endregion
 
 
-  constructor(private socketService: SocketService, private fb: FormBuilder) {
+  constructor(private socketService: SocketService, private fb: FormBuilder, private dialog: MatDialog) {
     this.socketsForm = this.fb.group({
       sockets: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+
+    // Get Sockets
     this.socketService.getSockets().subscribe(sockets => {
       this.sockets = sockets;
 
@@ -42,6 +47,9 @@ export class SocketsComponent implements OnInit {
         sockets.push(this.addSocketGroup(socket));
       })
     });
+
+    // Get Types
+    this.types = this.socketService.getSocketTypes();
   }
 
   private addSocketGroup(socket: Socket): FormGroup {
@@ -54,8 +62,7 @@ export class SocketsComponent implements OnInit {
   //#region Public Methods
   public setType(event: MatSelectChange, socket: any): void {
     // Update socket type
-    let typedString = event.value as keyof typeof SOCKET_TYPE;
-    socket.type = SOCKET_TYPE[typedString];
+    socket.type = event.value;
 
     // Cache update
     let update: Socket = this._socketUpdates[socket.id]
@@ -96,6 +103,15 @@ export class SocketsComponent implements OnInit {
     Object.keys(this._socketUpdates).forEach(id => {
       this.socketService.updateSocket(this._socketUpdates[id]);
     });
+  }
+
+
+  public addSocketType(): void {
+    this.dialog.open(AddSocketTypeDialogComponent);
+  }
+
+  public deleteSocketType(type: string): void {
+    this.dialog.open(DeleteSocketTypeDialogComponent, { data: { type: type } });
   }
 
   //#endregion

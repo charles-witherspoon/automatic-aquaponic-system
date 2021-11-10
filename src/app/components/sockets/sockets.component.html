@@ -1,6 +1,7 @@
 <div class="content">
-    <div class="page-title">
+    <div class="header">
         <p class="page-title">Sockets</p>
+        <button class="add-plant" mat-raised-button (click)="addSocketType()">Add Socket Type</button>
     </div>
     <div class="sockets">
         <div class="fields">
@@ -16,9 +17,12 @@
                             {{ socket.id }}
                         </span>
                         <mat-form-field class="type mat-elevation-z4"
-                            [ngStyle]="{'background-color': socket.type === types.NONE ? '#adadad' : 'transparent'}">
+                            [ngStyle]="{'background-color': socket.type === 'NONE' ? '#adadad' : 'transparent'}">
                             <mat-select (selectionChange)="setType($event, socket)" formControlName="type">
-                                <mat-option *ngFor="let type of types | keyvalue" [value]="type.value">{{ type.value }}
+                                <mat-option *ngFor="let type of types" [value]="type">
+                                    <p>{{ type }}</p>
+                                    <mat-icon class="delete" svgIcon="delete" color="warn"
+                                        (click)="deleteSocketType(type)"></mat-icon>
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -26,8 +30,9 @@
                             [ngStyle]="{'background-color' : socket.status === 'ON' ? '#c2edce' : socket.status === 'OFF' ? '#edc2c2' : '#adadad'}"
                             class="status mat-elevation-z4">
                             <mat-select (selectionChange)="setStatus($event, socket)" formControlName="status">
-                                <mat-option *ngFor="let status of statuses | keyvalue" [value]="status.value">{{
-                                    status.value }}</mat-option>
+                                <mat-option *ngFor="let status of statuses | keyvalue" [value]="status.value">
+                                    {{ status.value }}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

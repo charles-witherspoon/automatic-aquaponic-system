@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AddPlantDialogComponent } from './components/add-plant-dialog/add-plant-dialog.component';
 import { DeletePlantDialogComponent } from './components/delete-plant-dialog/delete-plant-dialog.component';
+import { AddSocketTypeDialogComponent } from './components/add-socket-type-dialog/add-socket-type-dialog.component';
+import { DeleteSocketTypeDialogComponent } from './components/delete-socket-type-dialog/delete-socket-type-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { DeletePlantDialogComponent } from './components/delete-plant-dialog/del
     GrowthDataComponent,
     AddPlantDialogComponent,
     DeletePlantDialogComponent,
+    AddSocketTypeDialogComponent,
+    DeleteSocketTypeDialogComponent,
   ],
   imports: [
     BrowserModule,
