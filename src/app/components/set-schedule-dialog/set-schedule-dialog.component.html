@@ -1,1 +1,42 @@
-<p>set-schedule-dialog works!</p>
+<div class="title">
+    <h2>Set Schedule</h2>
+    <button mat-raised-button (click)="addRange()">Add Range</button>
+</div>
+<mat-divider></mat-divider>
+<form [formGroup]="scheduleForm" (ngSubmit)="setSchedule()">
+    <mat-dialog-content>
+        <p class="info">Select ranges that the socket will be turned on</p>
+        <div formArrayName="ranges" *ngFor="let range of ranges()['controls']; let i = index;">
+            <div class="ranges" [formGroupName]="i">
+
+                <mat-form-field class="time" appearance="outline">
+                    <mat-label>Range Start</mat-label>
+                    <input focus matInput type="time" formControlName="start">
+                </mat-form-field>
+
+                <mat-form-field class="time" appearance="outline">
+                    <mat-label>Range End</mat-label>
+                    <input focus matInput type="time" formControlName="end">
+                </mat-form-field>
+
+                <mat-icon svgIcon="delete" color="warn" (click)="removeRange(i)"></mat-icon>
+            </div>
+        </div>
+
+        <p id="days-heading">Days</p>
+        <div class="days">
+            <mat-checkbox [formControl]="sunControl">SUN</mat-checkbox>
+            <mat-checkbox [formControl]="monControl">MON</mat-checkbox>
+            <mat-checkbox [formControl]="tueControl">TUE</mat-checkbox>
+            <mat-checkbox [formControl]="wedControl">WED</mat-checkbox>
+            <mat-checkbox [formControl]="thuControl">THU</mat-checkbox>
+            <mat-checkbox [formControl]="friControl">FRI</mat-checkbox>
+            <mat-checkbox [formControl]="satControl">SAT</mat-checkbox>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button class="action-button" mat-raised-button mat-dialog-close type="submit">Set Schedule</button>
+        <button mat-raised-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</form>

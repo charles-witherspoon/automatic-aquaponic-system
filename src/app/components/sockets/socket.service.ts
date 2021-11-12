@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Socket } from 'src/app/models/socket';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,20 @@ export class SocketService {
 
   private readonly SOCKETS_URL: string = 'http://localhost/sockets';
 
+  private readonly TYPES_URL: string = 'http://localhost/types';
+
   private sockets: Subject<Socket[]> = new Subject();
 
-  private types: Subject<string[]> = new Subject();
+  private _types: any[] = [];
+  private types: BehaviorSubject<string[]> = new BehaviorSubject(['uninitialized']);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.fetchTypes();
+  }
+
+  public get socketTypes() {
+    return this.types;
+  }
 
   public getSockets(): Subject<Socket[]> {
     this.fetchSockets();
@@ -28,21 +37,27 @@ export class SocketService {
       });
   }
 
-
   public updateSocket(socketUpdate: Socket): void {
     this.http.post<Socket>(this.SOCKETS_URL, socketUpdate)
       .subscribe();
   }
 
-  public getSocketTypes(): string[] {
-    return ["WATER PUMP", "LIGHT", "AERATOR", "HEATER", "NONE"];
+  public fetchTypes(): void {
+    this.http.get<any[]>(this.TYPES_URL)
+      .subscribe(types => {
+        this._types = types;
+        let values = this._types.map(t => t.value);
+        this.types.next(values);
+      });
   }
 
   public addSocketType(type: string) {
-    console.log(`added ${type}`);
+    this.http.post<any>(this.TYPES_URL, { value: type }).subscribe(_ => this.fetchTypes());
   }
 
-  public deleteSocketType(type: string) {
-    console.log(`deleted ${type}`);
+  public deleteSocketType(value: string) {
+    const id = this._types.find(type => type.value === value).id;
+    let params: HttpParams = new HttpParams().set('id', id);
+    this.http.delete(this.TYPES_URL, { params: params }).subscribe(_ => this.fetchTypes());
   }
 }

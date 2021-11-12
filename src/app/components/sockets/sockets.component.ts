@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
-import { SOCKET_TYPE, SOCKET_STATUS, Socket } from 'src/app/models/socket';
+import { BehaviorSubject } from 'rxjs';
+import { SOCKET_STATUS, Socket } from 'src/app/models/socket';
 import { AddSocketTypeDialogComponent } from '../add-socket-type-dialog/add-socket-type-dialog.component';
 import { DeleteSocketTypeDialogComponent } from '../delete-socket-type-dialog/delete-socket-type-dialog.component';
 import { SetScheduleDialogComponent } from '../set-schedule-dialog/set-schedule-dialog.component';
@@ -23,7 +24,7 @@ export class SocketsComponent implements OnInit {
   //#region Private Properties
   public sockets: Socket[] = [];
 
-  public types: string[] = [];
+  public types: BehaviorSubject<string[]>;
 
   public statuses: any = SOCKET_STATUS;
 
@@ -35,10 +36,10 @@ export class SocketsComponent implements OnInit {
     this.socketsForm = this.fb.group({
       sockets: this.fb.array([])
     });
+    this.types = this.socketService.socketTypes;
   }
 
   ngOnInit(): void {
-
     // Get Sockets
     this.socketService.getSockets().subscribe(sockets => {
       this.sockets = sockets;
@@ -48,9 +49,6 @@ export class SocketsComponent implements OnInit {
         sockets.push(this.addSocketGroup(socket));
       })
     });
-
-    // Get Types
-    this.types = this.socketService.getSocketTypes();
   }
 
   private addSocketGroup(socket: Socket): FormGroup {
@@ -111,13 +109,35 @@ export class SocketsComponent implements OnInit {
   }
 
   public deleteSocketType(type: string): void {
-    this.dialog.open(DeleteSocketTypeDialogComponent, { data: { type: type } });
+    let dialogRef = this.dialog.open(DeleteSocketTypeDialogComponent, { data: { type: type } });
+
+    dialogRef.afterClosed()
+      .subscribe(typeWasDeleted => {
+        if (typeWasDeleted) {
+          this.removeSocketTypeFromSockets(type);
+        }
+      });
   }
 
   public setSchedule(id: any) {
-    this.dialog.open(SetScheduleDialogComponent, { data: { id: id } })
+    this.dialog.open(SetScheduleDialogComponent, { height: '420px', maxHeight: '420px', data: { id: 1 } })
   }
 
   //#endregion
 
+
+  private removeSocketTypeFromSockets(type: string): void {
+    this.sockets.forEach(socket => {
+      if (!socket.id)
+        return;
+
+      if (socket.type === type) {
+        socket.type = 'NONE';
+
+        if (!this._socketUpdates[socket.id]) {
+          this._socketUpdates[socket.id] = socket;
+        }
+      }
+    })
+  }
 }

@@ -20,9 +20,9 @@
                         <mat-form-field class="type mat-elevation-z4"
                             [ngStyle]="{'background-color': socket.type === 'NONE' ? '#adadad' : 'transparent'}">
                             <mat-select (selectionChange)="setType($event, socket)" formControlName="type">
-                                <mat-option *ngFor="let type of types" [value]="type">
+                                <mat-option *ngFor="let type of types.value" [value]="type">
                                     <p>{{ type }}</p>
-                                    <mat-icon class="delete" svgIcon="delete" color="warn"
+                                    <mat-icon *ngIf="type !== 'NONE'" class="delete" svgIcon="delete" color="warn"
                                         (click)="deleteSocketType(type)"></mat-icon>
                                 </mat-option>
                             </mat-select>

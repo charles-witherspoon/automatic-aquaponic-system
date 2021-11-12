@@ -1,0 +1,77 @@
+.action-button {
+    background-color: var(--primary-button-color);
+}
+
+h2 {
+    text-align: center;
+}
+
+
+mat-dialog-content {
+    height: 220px;
+    margin: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    align-content: flex-end;
+}
+
+button {
+    margin: 5px;
+}
+
+.days {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: space-between;
+}
+
+mat-checkbox {
+    margin: 0 0.5rem;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.title button {
+    background-color: var(--primary-button-color);
+    margin-bottom: 1em;
+}
+
+.ranges {
+    overflow-y: hidden;
+    display: flex;
+    align-content: center;
+    justify-content: space-evenly;
+}
+
+.ranges mat-icon {
+    align-self: center;
+}
+
+.ranges mat-icon:hover {
+    cursor: pointer;
+}
+
+#days-heading {
+    font-size: 1.2rem;
+}
+
+.info {
+    margin-bottom: 1.2rem;
+}
+
+.time {
+    width: 120px;
+    margin: 0 1rem;
+}

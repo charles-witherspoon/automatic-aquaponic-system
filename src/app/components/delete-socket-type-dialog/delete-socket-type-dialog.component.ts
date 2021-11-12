@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SocketService } from '../sockets/socket.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { SocketService } from '../sockets/socket.service';
 })
 export class DeleteSocketTypeDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private socketService: SocketService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private socketService: SocketService, private dialogRef: MatDialogRef<DeleteSocketTypeDialogComponent>) { }
 
   ngOnInit(): void {
   }
@@ -17,6 +17,7 @@ export class DeleteSocketTypeDialogComponent implements OnInit {
   public deleteType(): void {
     if (this.data.type) {
       this.socketService.deleteSocketType(this.data.type);
+      this.dialogRef.close(true);
     }
   }
 }

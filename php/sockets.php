@@ -70,7 +70,6 @@ class SocketDataAccess {
         if ($count == 0) {
             $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF');");
         }
-        $count = $db->querySingle("SELECT COUNT(*) as count FROM sockets");
     }
 
     public function getSockets() {
