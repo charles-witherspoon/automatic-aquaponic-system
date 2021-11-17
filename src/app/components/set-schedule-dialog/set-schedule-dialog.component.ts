@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SocketService } from '../sockets/socket.service';
 
 @Component({
   selector: 'app-set-schedule-dialog',
@@ -20,7 +22,7 @@ export class SetScheduleDialogComponent implements OnInit {
 
   });
 
-  constructor(private fb: FormBuilder) {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: any, private fb: FormBuilder, private socketService: SocketService) {
     this.scheduleForm = this.fb.group({
       days: this.fb.group({
         sun: this.sunControl,
@@ -64,6 +66,10 @@ export class SetScheduleDialogComponent implements OnInit {
     this.ranges().removeAt(i);
   }
   public setSchedule() {
+    if (!this.data.id) {
+      return;
+    }
+
     const dayString: string = this.getDayString();
 
     let cronExpressions: string[] = [];
@@ -73,6 +79,10 @@ export class SetScheduleDialogComponent implements OnInit {
 
       cronExpressions.push(this.getCronString(dayString, start));
       cronExpressions.push(this.getCronString(dayString, end));
+    })
+
+    cronExpressions.forEach(cronExpr => {
+      this.socketService.addSchedule(cronExpr, this.data.id);
     })
 
   }

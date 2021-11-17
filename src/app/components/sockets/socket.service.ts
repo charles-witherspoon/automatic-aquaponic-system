@@ -12,10 +12,14 @@ export class SocketService {
 
   private readonly TYPES_URL: string = 'http://localhost/types';
 
+  private readonly SCHEDULES_URL: string = 'http://localhost/schedules';
+
   private sockets: Subject<Socket[]> = new Subject();
 
   private _types: any[] = [];
   private types: BehaviorSubject<string[]> = new BehaviorSubject(['uninitialized']);
+
+  private schedules: Subject<any[]> = new Subject();
 
   constructor(private http: HttpClient) {
     this.fetchTypes();
@@ -25,6 +29,8 @@ export class SocketService {
     return this.types;
   }
 
+
+  //#region Sockets
   public getSockets(): Subject<Socket[]> {
     this.fetchSockets();
     return this.sockets;
@@ -42,6 +48,10 @@ export class SocketService {
       .subscribe();
   }
 
+  //#endregion
+
+
+  //#region Socket Types
   public fetchTypes(): void {
     this.http.get<any[]>(this.TYPES_URL)
       .subscribe(types => {
@@ -60,4 +70,23 @@ export class SocketService {
     let params: HttpParams = new HttpParams().set('id', id);
     this.http.delete(this.TYPES_URL, { params: params }).subscribe(_ => this.fetchTypes());
   }
+
+  //#endregion
+
+  //#region Schedules
+
+  public getSchedules(): Subject<any[]> {
+    this.fetchSchedules();
+    return this.schedules;
+  }
+
+  public fetchSchedules(): void {
+    this.http.get<any[]>(this.SCHEDULES_URL).subscribe(schedules => this.schedules.next(schedules));
+  }
+
+  public addSchedule(cronString: string, socketId: number) {
+    this.http.post<any>(this.SCHEDULES_URL, { cronString: cronString, socketId: socketId }).subscribe();
+  }
+  //#endregion
+
 }

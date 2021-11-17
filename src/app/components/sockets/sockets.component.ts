@@ -49,6 +49,10 @@ export class SocketsComponent implements OnInit {
         sockets.push(this.addSocketGroup(socket));
       })
     });
+
+    this.socketService.getSchedules().subscribe(schedules => {
+      console.log(schedules);
+    });
   }
 
   private addSocketGroup(socket: Socket): FormGroup {
@@ -120,7 +124,7 @@ export class SocketsComponent implements OnInit {
   }
 
   public setSchedule(id: any) {
-    this.dialog.open(SetScheduleDialogComponent, { height: '420px', maxHeight: '420px', data: { id: 1 } })
+    this.dialog.open(SetScheduleDialogComponent, { height: '420px', maxHeight: '420px', data: { id: id } });
   }
 
   //#endregion
