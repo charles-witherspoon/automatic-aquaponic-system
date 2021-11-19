@@ -104,8 +104,8 @@ export class SetScheduleDialogComponent implements OnInit {
 
   private getCronString(dayString: string, timeString: string): string {
     const timeStringParts: string[] = timeString.split(':');
-    const hour: number = Number(timeStringParts[1]);
-    const minute: number = Number(timeStringParts[0]);
+    const hour: number = Number(timeStringParts[0]);
+    const minute: number = Number(timeStringParts[1]);
     const day: string = dayString ? dayString : '*';
 
     const cronString: string = `0 ${minute} ${hour} * * ${day} *`;

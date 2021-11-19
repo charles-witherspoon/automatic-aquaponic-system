@@ -8,11 +8,11 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class SocketService {
 
-  private readonly SOCKETS_URL: string = 'http://localhost/sockets';
+  private readonly SOCKETS_URL: string = 'http://charlesraspi/sockets';
 
-  private readonly TYPES_URL: string = 'http://localhost/types';
+  private readonly TYPES_URL: string = 'http://charlesraspi/types';
 
-  private readonly SCHEDULES_URL: string = 'http://localhost/schedules';
+  private readonly SCHEDULES_URL: string = 'http://charlesraspi/schedules';
 
   private sockets: Subject<Socket[]> = new Subject();
 

@@ -8,7 +8,7 @@ import { GrowthData, Plant } from 'src/app/models/plants';
 })
 export class GrowthDataService {
 
-  private readonly GROWTH_DATA_URL: string = 'http://localhost/plants';
+  private readonly GROWTH_DATA_URL: string = 'http://charlesraspi/plants';
 
   private plants: Subject<Plant[]> = new Subject();
 
