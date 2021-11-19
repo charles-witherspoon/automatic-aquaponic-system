@@ -1,11 +1,11 @@
 # AutomatedAquaponicSystem
 
 ## Deployment Steps
-</br>
+<br/>
 
 ### On RaspberryPi
 
-</br>
+<br/>
 Update Pi
 
 ```
@@ -20,18 +20,34 @@ sudo apt install php apache2 libapache2-mod-php -y
 
 sudo a2enmod mpm_prefork && sudo a2enmod php7.0 && sudo a2enmod rewrite
 ```
+Note: if you run into the error 
+
+`ERROR: Module php7.0 does not exist!`, 
+
+determine what version of PHP was install by running `php --version`, then re-run the command `sudo a2enmod php7.0` replacing "php7.0" with the php<version_number>
+
+<br/>
 
 Add mods for removing .php extension
+
 ```
 sudo perl -i -pe 's/(?<=<VirtualHost \*:80>\n)/\t<Directory \/var\/www\/html>\n\t\tOptions Indexes FollowSymLinks\n\t\tAllowOverride All\n\t\tRequire all granted\n\t<\/Directory>\n/' /etc/apache2/sites-available/000-default.conf
 
 
 echo "RewriteEngine on\nRewriteRule ^sockets$ sockets.php [NC]\nRewriteRule ^plants$ plants.php [NC]\nRewriteRule ^types$ types.php [NC]\nRewriteRule ^schedules$ schedules.php [NC]" > /var/www/html/.htaccess
 ```
-</br>
+<br/>
+
+Add database directory and give it open access
+
+```
+sudo mkdir ~/db && sudo chmod 777 ~/db
+```
+
+<br/>
 
 ### On build machine
-</br>
+<br/>
 
 Download code
 
@@ -49,10 +65,10 @@ ng build --base-href ./
 
 This generates a dist folder; move the contents of dist/automatic-aquaponic-system to /var/www/html/ on the pi device
 
-</br>
+<br/>
 
 ### Back on RasPi
-</br>
+<br/>
 
 Restart Apache server
 ```
