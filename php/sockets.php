@@ -98,6 +98,7 @@ class SocketDataAccess {
     }
     
     public function updateSocket($update) {
+        // Save to database
         $statement = $this->_db->prepare('UPDATE sockets SET type = :type, schedule = :schedule, status = :status WHERE id = :id;');
         $statement->bindValue(':id', $update->id);
         $statement->bindValue(':type', $update->type);
@@ -105,6 +106,12 @@ class SocketDataAccess {
         $statement->bindValue(':status', $update->status);
 
         $statement->execute();
+
+        // Call Perl script to update socket status
+        $id = $update->id;
+        $status = ($update->status == 'OFF') ? 0 : 1;
+        $command = "turnsocket.pl $id $status";
+        shell_exec($command);
     }
 }
 
