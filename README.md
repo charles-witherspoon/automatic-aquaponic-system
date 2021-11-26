@@ -52,6 +52,8 @@ sudo mkdir ~/db && sudo chmod 777 ~/db
 Download code
 
 Install git and npm
+
+(To build locally):
 ```
 git clone https://github.com/charles-witherspoon/automatic-aquaponic-system.git
 ```
@@ -63,7 +65,9 @@ npm i -g @angular/cli
 ng build --base-href ./
 ```
 
-This generates a dist folder; move the contents of dist/automatic-aquaponic-system to /var/www/html/ on the pi device
+This generates a dist folder; the latest version of the dist folder is also available in the repo.
+
+Move the contents of dist/automatic-aquaponic-system to /var/www/html/ on the pi device
 
 <br/>
 
