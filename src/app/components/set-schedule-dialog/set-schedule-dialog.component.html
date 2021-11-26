@@ -5,7 +5,7 @@
 <mat-divider></mat-divider>
 <form [formGroup]="scheduleForm" (ngSubmit)="setSchedule()">
     <mat-dialog-content>
-        <p class="info">Select ranges that the socket will be turned on</p>
+        <p class="info">Select ranges that the socket will be turned off</p>
         <div formArrayName="ranges" *ngFor="let range of ranges()['controls']; let i = index;">
             <div class="ranges" [formGroupName]="i">
 

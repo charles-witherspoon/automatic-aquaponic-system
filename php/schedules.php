@@ -49,10 +49,18 @@ class ScheduleDataAccess {
     }
 
     public function addSchedule($schedule) {
+        // Update database
         $statement = $this->_db->prepare('INSERT INTO schedules(cronString, socketId) VALUES (:cronString, :socketId);');
         $statement->bindValue(':cronString', $schedule->cronString);
         $statement->bindValue(':socketId', $schedule->socketId);
         $statement->execute();
+
+        // Add cron job
+        $id = $schedule->socketId;
+        $status = $schedule->onStatus;
+        $cronStr = $schedule->cronString;
+        $command = "(crontab -l 2>/dev/null; echo \"$cronStr ./turnsocket.pl $id $status\") | sort -u | crontab -";
+        exec($command);
     }
 }
 
@@ -69,7 +77,7 @@ function handlePost($schedulesDB) {
     $schedulesDB->addSchedule($schedule);
 }
 
-$db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
+$db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
 $db->busyTimeout(3000);
 $schedulesDB = new ScheduleDataAccess($db);
 

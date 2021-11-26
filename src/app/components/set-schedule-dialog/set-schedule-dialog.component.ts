@@ -65,6 +65,12 @@ export class SetScheduleDialogComponent implements OnInit {
   public removeRange(i: number): void {
     this.ranges().removeAt(i);
   }
+
+  /**
+   * Sets the schedules for when the socket will be turned off; 
+   * each range will have a cron job for 'start' (when to power off) 
+   * and 'end' (when to power back on)
+   */
   public setSchedule() {
     if (!this.data.id) {
       return;
@@ -72,17 +78,17 @@ export class SetScheduleDialogComponent implements OnInit {
 
     const dayString: string = this.getDayString();
 
-    let cronExpressions: string[] = [];
+    let cronAndStatus: [string, number][] = [];
     this.ranges().controls.forEach(control => {
       let start: string = control.value['start'];
       let end: string = control.value['end'];
 
-      cronExpressions.push(this.getCronString(dayString, start));
-      cronExpressions.push(this.getCronString(dayString, end));
+      cronAndStatus.push([this.getCronString(dayString, start), 0]);
+      cronAndStatus.push([this.getCronString(dayString, end), 1]);
     })
 
-    cronExpressions.forEach(cronExpr => {
-      this.socketService.addSchedule(cronExpr, this.data.id);
+    cronAndStatus.forEach(cronStatus => {
+      this.socketService.addSchedule(cronStatus[0], this.data.id, cronStatus[1]);
     })
 
   }

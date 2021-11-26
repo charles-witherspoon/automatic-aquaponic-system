@@ -84,8 +84,8 @@ export class SocketService {
     this.http.get<any[]>(this.SCHEDULES_URL).subscribe(schedules => this.schedules.next(schedules));
   }
 
-  public addSchedule(cronString: string, socketId: number) {
-    this.http.post<any>(this.SCHEDULES_URL, { cronString: cronString, socketId: socketId }).subscribe();
+  public addSchedule(cronString: string, socketId: number, status: number) {
+    this.http.post<any>(this.SCHEDULES_URL, { cronString: cronString, socketId: socketId, onStatus: status }).subscribe();
   }
   //#endregion
 
