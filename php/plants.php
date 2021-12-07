@@ -101,7 +101,7 @@ class PlantDataAccess {
         $growthData = $this->getGrowthData($plant->id);
         if ($growthData) {
             // Append to comma separated list
-            $growthData = $growthData . ' | ';
+            $growthData = $growthData . '|';
         } 
 
         $growthData = $growthData . $this->parseGrowthData($plant->growthData);
@@ -110,7 +110,7 @@ class PlantDataAccess {
     }
 
     function parseGrowthData($data) {
-        return '{ "date": ' . $data->date . ', "growth": ' . $data->growth . ' }';
+        return '{ "date": "' . $data->date . '", "growth": ' . $data->growth . ' }';
     }
 
     function saveGrowthData($id, $data) {
@@ -157,7 +157,6 @@ function handleGet($plantDB) {
 function handlePost($plantDB) {
     $json = file_get_contents('php://input');
     $plant = json_decode($json);
-
     // POST: Update plant
     if (isset($plant->id) && !isset($plant->name)) {
         $plantDB->addGrowthData($plant);
