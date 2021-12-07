@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 
@@ -31,6 +32,7 @@ const Material = [
   MatRadioModule,
   MatTabsModule,
   MatTableModule,
+  MatSliderModule,
 ]
 
 @NgModule({

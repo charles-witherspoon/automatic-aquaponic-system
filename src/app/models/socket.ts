@@ -22,7 +22,7 @@ export interface Socket {
     type: string,
     schedule: any,
     status: SOCKET_STATUS,
-    scheduleType?: SCHEDULE_TYPE
+    scheduleType: SCHEDULE_TYPE
 }
 
 export const MOCK_SOCKETS: Socket[] = [
@@ -31,47 +31,55 @@ export const MOCK_SOCKETS: Socket[] = [
         type: SOCKET_TYPE.HEATER,
         schedule: {},
         status: SOCKET_STATUS.ON,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 2,
         type: SOCKET_TYPE.WATER_PUMP,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 3,
         type: SOCKET_TYPE.LIGHT,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 4,
         type: SOCKET_TYPE.NONE,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 5,
         type: SOCKET_TYPE.NONE,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 6,
         type: SOCKET_TYPE.NONE,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 7,
         type: SOCKET_TYPE.NONE,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
     {
         id: 8,
         type: SOCKET_TYPE.NONE,
         schedule: {},
         status: SOCKET_STATUS.OFF,
+        scheduleType: SCHEDULE_TYPE.NONE
     },
 ]

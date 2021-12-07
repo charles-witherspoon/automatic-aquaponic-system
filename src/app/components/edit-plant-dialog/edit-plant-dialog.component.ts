@@ -4,6 +4,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EChartsOption } from 'echarts';
 import { GrowthData, Plant } from 'src/app/models/plants';
 import { GrowthDataService } from '../growth-data/growth-data.service';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-edit-plant-dialog',
@@ -20,6 +22,8 @@ export class EditPlantDialogComponent implements OnInit {
 
   public displayedColumns: string[] = ['date', 'growth', 'delete'];
 
+  public growthDataSource: MatTableDataSource<GrowthData> = new MatTableDataSource<GrowthData>();
+
   constructor(@Inject(MAT_DIALOG_DATA) private data: any, private fb: FormBuilder, private plantService: GrowthDataService) {
     this.plant = this.data.plant;
     this.growthDataForm = this.fb.group({
@@ -28,10 +32,7 @@ export class EditPlantDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.plant.growthData) {
-      this.plant.growthData = this.plant.growthData.sort((a, b) => a.date.localeCompare(b.date));
-      this.updateChart();
-    }
+    this.refreshGrowthData();
   }
 
   public addGrowthData() {
@@ -57,6 +58,8 @@ export class EditPlantDialogComponent implements OnInit {
       if (date && growth) {
         const growthData: GrowthData = { date: date, growth: growth };
         plantData.push(growthData);
+        if (!this.plant.growthData)
+          this.plant.growthData = [];
         this.plant.growthData.push(growthData);
       }
     });
@@ -66,13 +69,14 @@ export class EditPlantDialogComponent implements OnInit {
       this.plantService.updatePlant(`${this.plant.id}`, pd);
     })
 
-    this.updateChart();
+    this.refreshGrowthData();
+    this.growthData()['controls'] = [];
   }
 
   private updateChart(): void {
     this.chartOption = {
       xAxis: {
-        data: this.plant.growthData.map(data => new Date(data.date).toLocaleDateString())
+        data: this.plant.growthData.map(data => data.date)
       },
       yAxis: {
         type: 'value'
@@ -94,5 +98,13 @@ export class EditPlantDialogComponent implements OnInit {
 
   public removeFormField(index: number): void {
     this.growthData()['controls'].splice(index, 1);
+  }
+
+  private refreshGrowthData(): void {
+    if (this.plant.growthData) {
+      this.plant.growthData = this.plant.growthData.sort((a, b) => a.date.localeCompare(b.date));
+      this.growthDataSource.data = this.plant.growthData;
+      this.updateChart();
+    }
   }
 }

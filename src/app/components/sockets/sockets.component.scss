@@ -16,28 +16,6 @@ ol, ul {
     display: block;
 }
 
-// .power{ 
-//     min-width: 100px;
-//     min-height: 100px;
-//     border-radius: 50% !important;
-//     font-size: 4rem;
-// }
-
-// .schedule {
-//     flex: 1;
-//     margin-top: 1rem;
-//     padding-left: 1rem;
-//     padding-right: 1rem;
-// }
-
-// button.schedule {
-//     border: 1px solid lightgrey;
-//     background-color: var(--primary-color);
-//     color: var(--light-text-color);
-//     text-shadow: none;
-//     font-weight: 400;
-// }
-
 .sockets-container {
     background-color: #28292b;
 }
@@ -52,6 +30,7 @@ ol, ul {
 	position:relative;
 	background: url(../../../images/icon_header.png) no-repeat 50% 0;
 }
+
 #main h2{
 	display: block;
 	text-align: center;
@@ -62,28 +41,33 @@ ol, ul {
 	color: #fff;
 	margin: 0 0 81px;
 }
+
+/* Timeline 
+*/
 .box_timeline_holder{
-	background: url(../../../images/bg_timeline_l.png) no-repeat 0 70px;
+	background: url(../../../images/bg_timeline_l.png) no-repeat 0 22.25%;
 	position: relative;
-	padding: 0 0 0 100px;
 	overflow: hidden;
 }
 .box_timeline{
-	background: url(../../../images/bg_timeline_r.png) no-repeat 100% 70px;
+	background: url(../../../images/bg_timeline_r.png) no-repeat 100% 22.25%;
 	position: relative;
-	padding: 0 100px 0 0;
 	overflow: hidden;
 }
 .box_timeline ul{
 	position: relative;
-	background: url(../../../images/bg_ul.gif) repeat-x 0 76px;
+	background: url(../../../images/bg_ul.gif) repeat-x 0 23%;
 	overflow: hidden;
+	display: flex;
+	justify-content: space-evenly;
+	height: 500px;
+	box-sizing: border-box;
+	padding-top: 20px;
 }
 .box_timeline ul li{
-	float:left;
 	width: 170px;
-	margin: 0 0 0 30px;
-	background: url(../../../images/bg_ul.gif) repeat-x 0 76px;
+	margin: 0 2rem 0;
+
 }
 .box_timeline ul li:first-child{margin: 0;}
 .box_timeline ul li .dateOn{
@@ -100,13 +84,7 @@ ol, ul {
 	margin: 0 auto 12px;
 	overflow: hidden;
 }
-.box_timeline ul li .plant{
-	background: url(../../../images/plantimg.png) no-repeat 50% 0;
-	height: 86px;
-	width: 170px;
-	margin: 0 auto 12px;
-	overflow: hidden;
-}
+
 .box_timeline ul li .date span{
 	font-family: 'novecentosanswide';
 	font-weight:bold;
@@ -151,7 +129,7 @@ li {
     list-style-type: none;
 }
 
-.type-select {
+.select {
     border-radius: 3px;
     width: 180px;
     padding: 0.4rem;
@@ -161,4 +139,64 @@ li {
 
 .socket-toggle:hover {
     cursor: pointer;
+}
+
+.custom-range-btn {
+	font-family: 'novecento_sans_widemedium';
+	background-color: #50af6f;
+	color: #fff;
+}
+
+mat-slider {
+	margin: 0.6rem auto;
+}
+
+::ng-deep .mat-slider-track-background {
+	background-color: #a4a7ac;
+}
+
+::ng-deep mat-slider:hover .mat-slider-track-background {
+	background-color: #a4a7ac;
+}
+
+::ng-deep .mat-accent .mat-slider-track-fill, .mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label {
+	background-color: #50af6f;
+}
+
+::ng-deep mat-slider > div > div.mat-slider-thumb-container > div.mat-slider-thumb {
+	background-color: #50af6f;
+}
+
+ ::ng-deep mat-slider > div > div.mat-slider-thumb-container > div.mat-slider-thumb-label {
+	background-color: #50af6f;
+}
+
+.interval-btn {
+	margin-top: 1rem;
+	font-family: 'novecento_sans_widemedium';
+	background-color: #50af6f;
+	color: #fff;
+}
+
+.socket {
+	padding: 1rem;
+}
+
+mat-radio-button {
+	margin-bottom: 0.4rem;
+}
+
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
+	background-color: #50af6f;
+
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+	background-color: #50af6f;
+	border-color: #50af6f;
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+	background-color: #50af6f !important;
 }

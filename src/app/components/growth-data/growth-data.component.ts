@@ -23,38 +23,17 @@ export class GrowthDataComponent implements OnInit {
   //#region Public Properties
   public plants: Plant[] = [];
 
-  public plantsForm: FormGroup;
 
-  public chartOptions: EChartsOption[] = [];
+  public chartOptions: Map<number | undefined, EChartsOption> = new Map();
+
   //#endregion
 
   constructor(private plantService: GrowthDataService, private dialog: MatDialog, private fb: FormBuilder) {
-    this.plantsForm = this.fb.group({
-      plants: this.fb.array([])
-    })
+
   }
 
   ngOnInit(): void {
-    this.plantService.getPlants().subscribe(plants => {
-      this.plants = plants;
-
-      let plantsArray = this.plantsForm.get('plants') as FormArray;
-      this.plants.forEach(plant => {
-        plantsArray.push(this.addPlantGroup());
-        this.chartOptions.push(this.getChartOptions(plant));
-      });
-
-      this.dialog.open(EditPlantDialogComponent, { data: { plant: plants[0] }, height: '70vh', width: '70vw', panelClass: 'custom-dialog-container' });
-    });
-
-
-  }
-
-  private addPlantGroup(): FormGroup {
-    return this.fb.group({
-      date: new FormControl(),
-      growth: new FormControl()
-    })
+    this.getPlants();
   }
 
 
@@ -101,7 +80,9 @@ export class GrowthDataComponent implements OnInit {
   //#region Private Methods
 
   public onEditPlant(plant: Plant): void {
-    this.dialog.open(EditPlantDialogComponent, { data: { plant: plant }, height: '70vh', width: '70vw' });
+    this.dialog.open(EditPlantDialogComponent, { data: { plant: plant }, height: '70vh', width: '70vw', panelClass: 'custom-dialog-container' })
+      .afterClosed()
+      .subscribe(_ => this.getPlants());
   }
 
   private getChartOptions(plant: Plant): EChartsOption {
@@ -110,14 +91,41 @@ export class GrowthDataComponent implements OnInit {
         data: plant.growthData.map(_ => '')
       },
       yAxis: {
-        type: 'value'
+        show: false
       },
       series: [
         {
-          data: plant.growthData.map(data => data.growth),
+          data: plant.growthData.sort((a, b) => a.date.localeCompare(b.date)).map(data => data.growth),
           type: 'line'
         }
       ]
     };
+  }
+
+  public plantGroups(): number[] {
+
+    if (this.plants.length === 0)
+      return [0];
+
+    const plantGroups: number[] = [];
+
+    for (let i = 0; i < this.plants.length; i += 5) {
+      plantGroups.push(i);
+    }
+
+    return plantGroups;
+  }
+
+  private getPlants(): void {
+    this.plantService.getPlants().subscribe(plants => {
+      this.plants = plants;
+
+      this.plants.forEach(plant => {
+        if (plant.growthData && plant.id) {
+          this.chartOptions.set(plant.id, this.getChartOptions(plant));
+        }
+      });
+
+    });
   }
 }

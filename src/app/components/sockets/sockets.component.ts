@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { BehaviorSubject } from 'rxjs';
 import { SOCKET_STATUS, Socket } from 'src/app/models/socket';
 import { AddSocketTypeDialogComponent } from '../add-socket-type-dialog/add-socket-type-dialog.component';
@@ -19,6 +20,8 @@ export class SocketsComponent implements OnInit {
 
   //#region Private Properties
   private _socketUpdates: any = {};
+
+  private _intervalValue: number = 0;
   //#endregion
 
   //#region Private Properties
@@ -29,6 +32,8 @@ export class SocketsComponent implements OnInit {
   public statuses: any = SOCKET_STATUS;
 
   public socketsForm: FormGroup;
+
+  public intervalUnit: string = 'Minutes';
   //#endregion
 
 
@@ -48,6 +53,8 @@ export class SocketsComponent implements OnInit {
         let sockets = this.socketsForm.get('sockets') as FormArray;
         sockets.push(this.addSocketGroup(socket));
       })
+
+      console.log(sockets);
     });
 
     this.socketService.getSchedules().subscribe(schedules => {
@@ -63,50 +70,13 @@ export class SocketsComponent implements OnInit {
   }
 
   //#region Public Methods
-  public setType(event: MatSelectChange, socket: any): void {
-    // Update socket type
+  public setType(event: MatSelectChange, socket: Socket): void {
+    if (event.value === 'ADD_TYPE')
+      return;
+
     socket.type = event.value;
-
-    // Cache update
-    let update: Socket = this._socketUpdates[socket.id]
-    if (update) {
-      update.type = socket.type;
-    } else {
-      update = {
-        id: socket.id,
-        type: socket.type,
-        schedule: '',
-        status: socket.status
-      }
-      this._socketUpdates[socket.id] = update;
-    }
+    this.socketService.updateSocket(socket);
   }
-
-  public setStatus(status: string, socket: any): void {
-    // Update socket status
-    socket.status = status;
-
-    // Cache update
-    let update: Socket = this._socketUpdates[socket.id];
-    if (update) {
-      update.status = socket.status;
-    } else {
-      update = {
-        id: socket.id,
-        type: socket.type,
-        schedule: '',
-        status: socket.status
-      }
-      this._socketUpdates[socket.id] = update;
-    }
-  }
-
-  public onSave(): void {
-    Object.keys(this._socketUpdates).forEach(id => {
-      this.socketService.updateSocket(this._socketUpdates[id]);
-    });
-  }
-
 
   public addSocketType(): void {
     this.dialog.open(AddSocketTypeDialogComponent);
@@ -160,5 +130,22 @@ export class SocketsComponent implements OnInit {
       socket.status = SOCKET_STATUS.OFF;
 
     this.socketService.updateSocket(socket);
+  }
+
+  public setScheduleType(event: MatSelectChange, socket: Socket) {
+    socket.scheduleType = event.value;
+    this.socketService.updateSocket(socket);
+  }
+
+  public setIntervalValue(event: MatSliderChange): void {
+    if (event.value) {
+      this._intervalValue = event.value;
+    }
+  }
+
+  public setIntervalUnit(slider: MatSlider, unit: string): void {
+    slider.value = 1;
+    this._intervalValue = 1;
+    this.intervalUnit = unit;
   }
 }

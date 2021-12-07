@@ -9,12 +9,14 @@ class Socket implements JsonSerializable {
     private $_type;
     private $_schedule;
     private $_status;
+    private $_scheduleType;
 
-    public function __construct($id, $type, $schedule, $status) {
+    public function __construct($id, $type, $schedule, $status, $scheduleType) {
         $this->_id = $id;
         $this->_type = $type;
         $this->_schedule = $schedule;
         $this->_status = $status;
+        $this->_scheduleType = $scheduleType;
     }
 
     public function jsonSerialize() {
@@ -22,7 +24,8 @@ class Socket implements JsonSerializable {
             'id' => $this->_id,
             'type' => $this->_type,
             'schedule' => $this->_schedule,
-            'status' => $this->_status
+            'status' => $this->_status,
+            'scheduleType' => $this->_scheduleType
         ];
     }
 
@@ -37,6 +40,14 @@ class Socket implements JsonSerializable {
 
     public function getType() {
         return $this->_type;
+    }
+
+    public function setScheduleType($scheduleType) {
+        $this->_scheduleType = $scheduleType;
+    }
+    
+    public function getScheduleType() {
+        return $this->_scheduleType;
     }
 
     public function setSchedule($schedule) {
@@ -63,12 +74,12 @@ class SocketDataAccess {
     public function __construct(SQLite3 $db) {
         $this->_db = $db;
         // Create sockets table if necessary
-        $db->exec("CREATE TABLE IF NOT EXISTS sockets(id INTEGER PRIMARY KEY, type TEXT, schedule TEXT, status TEXT);");
+        $db->exec("CREATE TABLE IF NOT EXISTS sockets(id INTEGER PRIMARY KEY, type TEXT, scheduleType TEXT, status TEXT);");
 
         // Initialized to default if empty
         $count = $db->querySingle("SELECT COUNT(*) as count FROM sockets");
         if ($count == 0) {
-            $db->exec("INSERT INTO sockets(type, schedule, status) VALUES ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF'), ('NONE', '{}', 'OFF');");
+            $db->exec("INSERT INTO sockets(type, scheduleType, status) VALUES ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF'), ('NONE', 'NONE', 'OFF');");
         }
     }
 
@@ -77,7 +88,7 @@ class SocketDataAccess {
 
         $result = $this->_db->query('SELECT * FROM sockets;');
         while ($row = $result->fetchArray()) {
-            $socket = new Socket($row['id'], $row['type'], $row['schedule'], $row['status']);
+            $socket = new Socket($row['id'], $row['type'], null, $row['status'], $row['scheduleType']);
             array_push($sockets, $socket);
         }
 
@@ -91,7 +102,7 @@ class SocketDataAccess {
         $result = $statement->execute();
         $row = $result->fetchArray();
         if ($row) {
-            return new Socket($row['id'], $row['type'], $row['schedule'], $row['status']);
+            return new Socket($row['id'], $row['type'], null, $row['status'], $row['scheduleType']);
         }
 
         return null;
@@ -99,10 +110,10 @@ class SocketDataAccess {
     
     public function updateSocket($update) {
         // Save to database
-        $statement = $this->_db->prepare('UPDATE sockets SET type = :type, schedule = :schedule, status = :status WHERE id = :id;');
+        $statement = $this->_db->prepare('UPDATE sockets SET type = :type, scheduleType = :scheduleType, status = :status WHERE id = :id;');
         $statement->bindValue(':id', $update->id);
         $statement->bindValue(':type', $update->type);
-        $statement->bindValue(':schedule', $update->schedule);
+        $statement->bindValue(':scheduleType', $update->scheduleType);
         $statement->bindValue(':status', $update->status);
 
         $statement->execute();
@@ -143,7 +154,8 @@ function handlePost($socketDB) {
 
 
 
-$db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
+// $db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
+$db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
 $db->busyTimeout(3000);
 $socketDB = new SocketDataAccess($db);
 

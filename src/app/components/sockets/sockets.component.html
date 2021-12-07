@@ -1,61 +1,13 @@
-<!-- <div class="content">
-    <div class="header">
-        <p class="page-title">Sockets</p>
-        <button class="add-plant" mat-raised-button (click)="addSocketType()">Add Socket Type</button>
-    </div>
-    <div class="sockets">
-        <div class="fields">
-            <span class="id">ID</span>
-            <span class="type">Type</span>
-            <span class="status">Status</span>
-            <span class="schedule"></span>
-        </div>
-        <form [formGroup]="socketsForm" (ngSubmit)="onSave()">
-            <div *ngFor="let socket of sockets; let i = index;" formArrayName="sockets">
-                <div [formGroupName]="i">
-                    <div class="socket mat-elevation-z4">
-                        <span class="id">
-                            {{ socket.id }}
-                        </span>
-                        <mat-form-field class="type mat-elevation-z4"
-                            [ngStyle]="{'background-color': socket.type === 'NONE' ? '#adadad' : 'transparent'}">
-                            <mat-select (selectionChange)="setType($event, socket)" formControlName="type">
-                                <mat-option *ngFor="let type of types.value" [value]="type">
-                                    <p>{{ type }}</p>
-                                    <mat-icon *ngIf="type !== 'NONE'" class="delete" svgIcon="delete" color="warn"
-                                        (click)="deleteSocketType(type)"></mat-icon>
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-icon *ngIf="socket.status === 'ON'; else powerOff" class="status power"
-                            [ngStyle]="{ 'color': 'green'}" (click)="setStatus('OFF', socket)">
-                            power
-                        </mat-icon>
-                        <ng-template #powerOff>
-                            <mat-icon class="status power" [ngStyle]="{ 'color': 'red'}"
-                                (click)="setStatus('ON', socket)">
-                                power_off
-                            </mat-icon>
-                        </ng-template>
-                        <button mat-raised-button class="schedule" type="button" (click)="setSchedule(socket.id)">Set
-                            Schedule</button>
-                    </div>
-                </div>
-            </div>
-            <button mat-raised-button type="submit">Save</button>
-        </form>
-
-    </div>
-</div> -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" />
 <section id="main">
-    <h2>Current Outlet Schedule</h2>
+    <h2>Outlets</h2>
     <form>
-        <div class="box_timeline_holder">
+        <div class="box_timeline_holder" *ngFor="let group of [0,4]">
+            <!-- <div class="box_timeline_holder" *ngFor="let group of [0]"> -->
             <div class="box_timeline">
                 <ul>
-                    <ng-container *ngFor="let socket of sockets; let i = index;">
-                        <li *ngIf="i < 4">
+                    <ng-container *ngFor="let socket of sockets.slice(group, group + 4); let i = index;">
+                        <li *ngIf="i < 4" class="socket">
                             <!-- Socket Status -->
                             <div [ngClass]="socket.status === 'ON' ? 'dateOn' : 'dateOff'" class="socket-toggle"
                                 (click)="toggleStatus(socket)">
@@ -66,7 +18,7 @@
                             <!-- Socket Type -->
                             <mat-label>Socket Type:</mat-label>
                             <mat-select (selectionChange)="setType($event, socket)" [value]="socket.type"
-                                class="type-select">
+                                class="select">
                                 <mat-option *ngFor="let type of types.value" [value]="type">
                                     <p>{{ type }}</p>
                                     <mat-icon *ngIf="type !== 'NONE'" class="delete" svgIcon="delete" color="warn"
@@ -76,93 +28,40 @@
                             </mat-select>
 
                             <!-- Socket Schedule -->
-                            <!-- <label>Schedule Type</label>
-                            <mat-radio-group [(ngModel)]="socket.scheduleType">
-                                <mat-radio-button [value]="socket.scheduleType">Interval</mat-radio-button>
-                                <mat-radio-button [value]="socket.scheduleType">Custom Range</mat-radio-button>
-                                <mat-radio-button [value]="socket.scheduleType">None</mat-radio-button>
-                            </mat-radio-group> -->
+                            <mat-label>Schedule Type:</mat-label>
+                            <mat-select [value]="socket.scheduleType" class="select"
+                                (selectionChange)="setScheduleType($event, socket)">
+                                <mat-option value="NONE">None</mat-option>
+                                <mat-option value="INTERVAL">Interval</mat-option>
+                                <mat-option value="CUSTOM">Custom Range</mat-option>
+                            </mat-select>
+
+                            <div [ngSwitch]="socket.scheduleType">
+                                <div *ngSwitchCase="'CUSTOM'">
+                                    <button mat-raised-button class="custom-range-btn" (click)="setSchedule(socket.id)">
+                                        Add Custom Range
+                                    </button>
+                                </div>
+                                <div *ngSwitchCase="'INTERVAL'">
+                                    <div class="interval-labels">
+
+                                    </div>
+                                    <mat-slider step="1" min="1" [max]="intervalUnit === 'Minutes' ? '59' : '24'"
+                                        (input)="setIntervalValue($event)" #intervalSlider thumbLabel>
+                                    </mat-slider>
+                                    <mat-radio-group [value]="intervalUnit">
+                                        <mat-radio-button value="Minutes"
+                                            (change)="setIntervalUnit(intervalSlider, 'Minutes')">Minutes
+                                        </mat-radio-button>
+                                        <mat-radio-button value="Hours"
+                                            (change)="setIntervalUnit(intervalSlider, 'Hours')">Hours
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                    <button mat-raised-button class="interval-btn">Save Interval</button>
+                                </div>
+                            </div>
                         </li>
                     </ng-container>
-                </ul>
-            </div>
-        </div>
-        <br><br><br><br>
-        <br><br><br>
-        <div class="box_timeline_holder">
-            <div class="box_timeline">
-                <ul>
-                    <li>
-                        <div class="dateOn">
-                            <span>ON</span>
-                        </div>
-                        <h3>Socket 5</h3>
-                        <label for="SocketName5">Socket name:</label><br>
-                        <input type="text" id="s5name" name="s5name"><br>
-                        <select name="S5Type" id="S5Type">
-                            Type of Socket:<option value="" selected="selected">Click Only</option>
-                            <option value="">Schedule</option>
-                            <option value="">Interval</option>
-                        </select>
-                        <br>
-                        <input type="radio" id="html" name="s5On" value="s5On">
-                        <label for="html">ON</label>
-                        <input type="radio" id="css" name="s5Off" value="s5Off">
-                        <label for="css">OFF</label>
-                    </li>
-                    <li>
-                        <div class="dateOff" color="#FF6347">
-                            <span>OFF</span>
-                        </div>
-                        <h3>Socket 6</h3>
-                        <label for="SocketName6">Socket name:</label><br>
-                        <input type="text" id="s2name" name="s2name"><br>
-                        <select name="S6Type" id="S6Type">
-                            <option value="">Click Only</option>
-                            <option value="" selected="selected">Schedule</option>
-                            <option value="">Interval</option>
-                        </select><br>
-                        <label for="S6Start">Select start time:</label>
-                        <input type="time" id="S6Start" name="S6Start"><br>
-                        <label for="S6Stop">Select stop time:</label><br>
-                        <input type="time" id="S6Stop" name="S6Stop">
-                        <br>
-
-                    </li>
-                    <li>
-                        <div class="dateOff">
-                            <span color="#FF6347">OFF</span>
-                        </div>
-                        <h3>Socket 7</h3>
-                        <label for="SocketName7">Socket name:</label><br>
-                        <input type="text" id="s7name" name="s7name"><br>
-                        <select name="S7Type" id="S7Type">
-                            <option value="">Click Only</option>
-                            <option value="">Schedule</option>
-                            <option value="" selected="selected">Interval</option>
-                        </select><br>
-                        <label for="S7Interval">Intervals per 60 mins :</label>
-                        <input type="range" id="S7Interval" name="S7Interval" min="0" max="60">
-                        <br>
-
-                    </li>
-                    <li>
-                        <div class="dateOff">
-                            <span color="#FF6347">OFF</span>
-                        </div>
-                        <h3>Socket 8</h3>
-                        <label for="SocketName8">Socket name:</label><br>
-                        <input type="text" id="s8name" name="s8name"><br>
-                        <select name="S8Type" id="S8Type">
-                            <option value="">Click Only</option>
-                            <option value="">Schedule</option>
-                            <option value="" selected="selected">Interval</option>
-                        </select><br>
-                        <label for="S8Interval">Intervals per 60 mins :</label>
-                        <input type="range" id="S8Interval" name="S8Interval" min="0" max="60">
-                        <br>
-
-                    </li>
                 </ul>
             </div>
         </div>

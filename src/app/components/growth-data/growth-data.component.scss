@@ -2,6 +2,15 @@ ol, ul {
 	list-style: none;
 }
 
+.header-container h3 {
+	font-family: 'novecento_sans_widebook';
+	color: #50af6f;
+	margin: auto;
+	text-align: center;
+	font-weight: 500;
+	font-size: 2.2rem;
+}
+
 .add-plant-container {
     padding: 1rem;
     margin-bottom: 1rem;
@@ -26,6 +35,7 @@ section {
 	position: relative;
 	padding: 0 0 0 100px;
 	overflow: hidden;
+	margin-bottom: 2rem;
 }
 .box_timeline{
 	background: url(../../../images/bg_timeline_r.png) no-repeat 100% 70px;
@@ -48,6 +58,13 @@ section {
 
 .box_timeline ul li .plant{
 	background: url(../../../images/plantimg.png) no-repeat 50% 0;
+	height: 86px;
+	width: 170px;
+	margin: 0 auto 12px;
+	overflow: hidden;
+}
+
+.box_timeline ul li .no-plant{
 	height: 86px;
 	width: 170px;
 	margin: 0 auto 12px;
@@ -89,4 +106,13 @@ section {
 	// border: solid 1px green;
 	padding: 0;
 	height: 200px;
+}
+
+.chart-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.chart-label {
+	margin: 0 auto;
 }
