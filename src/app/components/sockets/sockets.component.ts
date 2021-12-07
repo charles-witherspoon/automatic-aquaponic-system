@@ -144,4 +144,21 @@ export class SocketsComponent implements OnInit {
       }
     })
   }
+
+  public onTypeChange($event: any) {
+    const select: HTMLSelectElement = $event as HTMLSelectElement;
+    if (select.value === 'ADD_TYPE')
+      this.addSocketType();
+    else
+      console.log(select.value);
+  }
+
+  public toggleStatus(socket: Socket) {
+    if (socket.status === SOCKET_STATUS.OFF)
+      socket.status = SOCKET_STATUS.ON;
+    else
+      socket.status = SOCKET_STATUS.OFF;
+
+    this.socketService.updateSocket(socket);
+  }
 }

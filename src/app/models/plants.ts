@@ -1,5 +1,5 @@
 export interface GrowthData {
-    date: Date,
+    date: string,
     growth: number
 }
 

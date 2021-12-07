@@ -1,0 +1,42 @@
+.header-container {
+    background-color: #50af6f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.header-links, h1, p {
+    color: #fff;
+}
+
+.header-links {
+    padding: 1rem;
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.header-links > * {
+    margin: 0.5rem;
+}
+
+.header-links a {
+    text-decoration: none;
+}
+
+.header-links a:visited {
+    color: #fff;
+}
+
+h1.title {
+    font-size: 4rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+p.subtitle {
+    text-align: center;
+    font-size: 1.4rem;
+}

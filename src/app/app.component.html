@@ -1,28 +1,39 @@
-<div class="container">
-  <!-- Header -->
-  <mat-toolbar color="primary" class="header mat-elevation-z4">
-    <span class="app-title">Automatic Aquaponic System</span>
-    <div class="menu">
-      <a href="#" aria-label="system settings link">System Settings</a>
-      <a href="#" aria-label="user settings link">User Settings</a>
-      <a href="#" aria-label="logout link">Logout</a>
+<div id="wrapper">
+  <div class="wrapper-holder">
+    <header id="header">
+      <a class="menu_trigger" href="#">menu</a>
+      <nav id="nav">
+        <ul>
+          <li><a class="active" href="index.html">Home</a></li>
+          <li><a href="myskills.html">Growth Charts</a></li>
+          <li><a href="Portfolio.html">New Growth Data</a></li>
+          <li><a href="Contact.html">Settings</a></li>
+        </ul>
+      </nav>
+      <h1 class="logo">Automated Aquaponic Garden</h1>
+      <h2 class="slogan">Let's grow something</h2>
+    </header>
+  </div>
+  <div class="wrapper-holder grey">
+    <!-- Sockets -->
+    <app-sockets></app-sockets>
+  </div>
+  <div class="footer-content">
+    <!-- Plants -->
+    <app-growth-data></app-growth-data>
+  </div>
+  <footer id="footer">
+    <div class="footer-content">
+      <br><br><br><br>
+      <br><br><br>
+      <ul class="social">
+        <li class="email"><a href="#">Email</a></li>
+        <li class="facebook"><a href="#">Facebook</a></li>
+        <li class="google"><a href="#">Google+</a></li>
+        <li class="twitter"><a href="#">Twitter</a></li>
+        <li class="pinterest"><a href="#">Pinterest</a></li>
+      </ul>
+      <p class="copy">Copyright 2021 Wright State Group 11 (DK) All rights reserved.</p>
     </div>
-  </mat-toolbar>
-
-  <!-- Main Content -->
-  <mat-sidenav-container class="main-content">
-    <mat-sidenav-content [ngSwitch]="content">
-      <app-sockets *ngSwitchCase="'SOCKETS'"></app-sockets>
-      <app-growth-data *ngSwitchCase="'GROWTH_DATA'"></app-growth-data>
-    </mat-sidenav-content>
-    <mat-sidenav class="side-nav" position="end" mode="side" opened>
-      <!-- <button mat-raised-button aria-label="button to navigate to dashboard"
-        (click)="setContent('DASHBOARD')">Dashboard</button> -->
-      <button mat-raised-button aria-label="button to navigate to dashboard"
-        (click)="setContent('SOCKETS')">Sockets</button>
-      <button mat-raised-button aria-label="button to navigate to dashboard" (click)="setContent('GROWTH_DATA')">Growth
-        Data</button>
-    </mat-sidenav>
-  </mat-sidenav-container>
-
+  </footer>
 </div>

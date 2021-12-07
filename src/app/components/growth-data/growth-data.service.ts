@@ -8,7 +8,9 @@ import { GrowthData, Plant } from 'src/app/models/plants';
 })
 export class GrowthDataService {
 
-  private readonly GROWTH_DATA_URL: string = 'http://charlesraspi/plants';
+  // private readonly GROWTH_DATA_URL: string = 'http://charlesraspi/plants';
+
+  private readonly GROWTH_DATA_URL: string = 'http://localhost/plants';
 
   private plants: Subject<Plant[]> = new Subject();
 
@@ -21,7 +23,17 @@ export class GrowthDataService {
 
   public fetchPlants(): void {
     this.http.get<Plant[]>(this.GROWTH_DATA_URL)
-      .subscribe(plants => this.plants.next(plants));
+      .subscribe(plants => {
+        plants.forEach(plant => {
+          if (plant.growthData) {
+            const growthDataString: any = plant.growthData;
+            const growthData: string[] = growthDataString.split('|');
+            const plantData: GrowthData[] = growthData.map(data => JSON.parse(data));
+            plant.growthData = plantData;
+          }
+        })
+        this.plants.next(plants)
+      });
   }
 
   public addPlant(name: string): void {

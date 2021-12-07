@@ -14,6 +14,9 @@ import { DeletePlantDialogComponent } from './components/delete-plant-dialog/del
 import { AddSocketTypeDialogComponent } from './components/add-socket-type-dialog/add-socket-type-dialog.component';
 import { DeleteSocketTypeDialogComponent } from './components/delete-socket-type-dialog/delete-socket-type-dialog.component';
 import { SetScheduleDialogComponent } from './components/set-schedule-dialog/set-schedule-dialog.component';
+import { HeaderComponent } from './components/header/header.component';
+import { EditPlantDialogComponent } from './components/edit-plant-dialog/edit-plant-dialog.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,8 @@ import { SetScheduleDialogComponent } from './components/set-schedule-dialog/set
     AddSocketTypeDialogComponent,
     DeleteSocketTypeDialogComponent,
     SetScheduleDialogComponent,
+    HeaderComponent,
+    EditPlantDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +38,10 @@ import { SetScheduleDialogComponent } from './components/set-schedule-dialog/set
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'),
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

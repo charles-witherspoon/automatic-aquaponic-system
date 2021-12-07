@@ -5,7 +5,8 @@ import { GrowthDataService } from './growth-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPlantDialogComponent } from '../add-plant-dialog/add-plant-dialog.component';
 import { DeletePlantDialogComponent } from '../delete-plant-dialog/delete-plant-dialog.component';
-import { MatInput } from '@angular/material/input';
+import { EditPlantDialogComponent } from '../edit-plant-dialog/edit-plant-dialog.component';
+import { EChartsOption } from 'echarts';
 
 
 @Component({
@@ -23,6 +24,8 @@ export class GrowthDataComponent implements OnInit {
   public plants: Plant[] = [];
 
   public plantsForm: FormGroup;
+
+  public chartOptions: EChartsOption[] = [];
   //#endregion
 
   constructor(private plantService: GrowthDataService, private dialog: MatDialog, private fb: FormBuilder) {
@@ -36,8 +39,15 @@ export class GrowthDataComponent implements OnInit {
       this.plants = plants;
 
       let plantsArray = this.plantsForm.get('plants') as FormArray;
-      this.plants.forEach(_ => plantsArray.push(this.addPlantGroup()))
+      this.plants.forEach(plant => {
+        plantsArray.push(this.addPlantGroup());
+        this.chartOptions.push(this.getChartOptions(plant));
+      });
+
+      this.dialog.open(EditPlantDialogComponent, { data: { plant: plants[0] }, height: '70vh', width: '70vw', panelClass: 'custom-dialog-container' });
     });
+
+
   }
 
   private addPlantGroup(): FormGroup {
@@ -61,7 +71,7 @@ export class GrowthDataComponent implements OnInit {
   public setDate(event: Event, plant: Plant): void {
     let input = event.target as HTMLInputElement;
     if (input && plant.id) {
-      this.cacheData(plant.id, { key: 'date', date: input.value });
+      this.cacheData(plant.id, { key: 'date', date: `'${input.value}''` });
     }
   }
 
@@ -90,4 +100,24 @@ export class GrowthDataComponent implements OnInit {
   }
   //#region Private Methods
 
+  public onEditPlant(plant: Plant): void {
+    this.dialog.open(EditPlantDialogComponent, { data: { plant: plant }, height: '70vh', width: '70vw' });
+  }
+
+  private getChartOptions(plant: Plant): EChartsOption {
+    return {
+      xAxis: {
+        data: plant.growthData.map(_ => '')
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: plant.growthData.map(data => data.growth),
+          type: 'line'
+        }
+      ]
+    };
+  }
 }

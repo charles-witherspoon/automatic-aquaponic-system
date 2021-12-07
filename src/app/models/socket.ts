@@ -11,11 +11,18 @@ export enum SOCKET_STATUS {
     OFF = "OFF",
 }
 
+export enum SCHEDULE_TYPE {
+    INTERVAL = "INTERVAL",
+    CUSTOM = "CUSTOM",
+    NONE = "NONE"
+}
+
 export interface Socket {
     id?: number,
     type: string,
     schedule: any,
-    status: SOCKET_STATUS
+    status: SOCKET_STATUS,
+    scheduleType?: SCHEDULE_TYPE
 }
 
 export const MOCK_SOCKETS: Socket[] = [

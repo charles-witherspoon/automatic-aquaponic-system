@@ -1,72 +1,92 @@
-.content {
+ol, ul {
+	list-style: none;
+}
+
+.add-plant-container {
     padding: 1rem;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.page-title {
-    font-size: 1.8rem;
-    font-weight: 500;
-}
-
-
-.container {
-    padding-top: 1rem;
-}
-
-
-.fields {
-    font-size: 1.4rem;
-}
-
-.plants, .fields {
-    display: flex;
-    align-items: center;
-    padding-left: 1rem;
     margin-bottom: 1rem;
-    padding-top: 1rem;
-    border-radius: 8px;
+    display: flex;
+    justify-content: end;
 }
 
-.plants > *, .fields > * {
-    margin-right: 1rem;
-}
-
-.name {
-    min-width: 7vw;
-}
-
-.date {
-    width: 10vw;
-}
-
-.growth {
-    width: 5vw;
-    margin-left: 2rem;
-}
-
-.save, .add-plant {
-    background-color: var(--primary-button-color);
-    color: var(--secondary-color);
+.add-plant {
+    background-color: #50af6f;
+    color: #fff;
+    font-family: "novecento_sans_widebook";
+    font-weight: light;
     font-size: 1.2rem;
-    text-shadow: 1px 1px var(--primary-background-color);
-    padding: 0.2rem 1.4rem;
-    margin-right: 4rem;
 }
 
-p#no-plants {
-    padding-left: 1rem;
-    padding-top: 1rem;
-    height: 3rem;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    color: grey;
+section {
+    // border: solid 1px orange;
+}
+
+.box_timeline_holder{
+	background: url(../../../images/bg_timeline_l.png) no-repeat 0 70px;
+	position: relative;
+	padding: 0 0 0 100px;
+	overflow: hidden;
+}
+.box_timeline{
+	background: url(../../../images/bg_timeline_r.png) no-repeat 100% 70px;
+	position: relative;
+	padding: 0 100px 0 0;
+	overflow: hidden;
+}
+.box_timeline ul{
+	position: relative;
+	background: url(../../../images/bg_ul.gif) repeat-x 0 76px;
+	overflow: hidden;
+}
+.box_timeline ul li{
+	float:left;
+	width: 170px;
+	margin: 0 0 0 30px;
+	background: url(../../../images/bg_ul.gif) repeat-x 0 76px;
+}
+.box_timeline ul li:first-child{margin: 0;}
+
+.box_timeline ul li .plant{
+	background: url(../../../images/plantimg.png) no-repeat 50% 0;
+	height: 86px;
+	width: 170px;
+	margin: 0 auto 12px;
+	overflow: hidden;
+}
+
+.box_timeline h3{
+	font-family: 'novecento_sans_widemedium';
+	color: #50af6f;
+	font-size: 14px;
+	line-height: 16px;
+	display: block;
+	text-align: center;
+	margin: 0 0 10px;
+}
+
+.plants {
+    // border: solid 1px orange;
+}
+
+
+.plant:hover {
+    cursor: pointer;
+}
+
+.plant-container:hover > .plant .delete {
+    display: inline;
+    position: absolute;
+    top: 0;
 }
 
 .delete {
-    margin-left: auto;
+    display: none;
+    // border: solid 1px green;
+}
+
+.chart {
+	margin-top: 0;
+	// border: solid 1px green;
+	padding: 0;
+	height: 200px;
 }

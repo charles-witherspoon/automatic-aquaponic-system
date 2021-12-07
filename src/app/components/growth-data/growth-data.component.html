@@ -1,4 +1,4 @@
-<div class="content">
+<!-- <div class="content">
     <div class="header">
         <h2 class="page-title">Growth Data</h2>
         <button class="add-plant" mat-raised-button (click)="addPlant()">Add Plant</button>
@@ -32,4 +32,74 @@
             <button class="save" mat-raised-button type="submit">Save</button>
         </form>
     </div>
+</div> -->
+<div class="add-plant-container">
+    <button class="add-plant" mat-raised-button (click)="addPlant()">Add Plant</button>
 </div>
+<section>
+    <div class="box_timeline_holder">
+        <div class="box_timeline">
+            <ul>
+                <li *ngFor="let plant of plants; let i = index;" class="plant-container">
+                    <h3>{{ plant.name }}</h3>
+                    <div class="plant" (click)="onEditPlant(plant)">
+                        <mat-icon class="delete" svgIcon="delete" color="warn"
+                            (click)="deletePlant(plant.id, plant.name)">
+                        </mat-icon>
+                    </div>
+                    <div *ngIf="plant.growthData" echarts [options]="chartOptions[i]" class="chart"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+<br><br><br><br>
+<br><br><br>
+<section>
+    <div class="box_timeline_holder">
+        <div class="box_timeline">
+            <ul>
+                <li>
+                    <h3>Plant 1</h3>
+                    <div class="plant"></div>
+                    <label for="plant1">Plant name:</label><br>
+                    <input type="text" id="plant1name" name="plant1name"><br>
+                    <label for="plant1birthday">Plant 1 Birthday:</label>
+                    <input type="date" id="plant1birthday" name="plant1birthday">
+                </li>
+                <li>
+                    <h3>Plant 2</h3>
+                    <div class="plant"></div>
+                    <label for="plant2">Plant name:</label><br>
+                    <input type="text" id="plant2name" name="plant1name"><br>
+                    <label for="plant2birthday">Plant 2 Birthday:</label>
+                    <input type="date" id="plant2birthday" name="plant2birthday">
+                </li>
+                <li>
+                    <h3>Plant 3</h3>
+                    <div class="plant"></div>
+                    <label for="plant3">Plant name:</label><br>
+                    <input type="text" id="plant3name" name="plant1name"><br>
+                    <label for="plant3birthday">Plant 3 Birthday:</label>
+                    <input type="date" id="plant3birthday" name="plant3birthday">
+                </li>
+                <li>
+                    <h3>Plant 4</h3>
+                    <div class="plant"></div>
+                    <label for="plant4">Plant name:</label><br>
+                    <input type="text" id="plant4name" name="plant1name"><br>
+                    <label for="plant4birthday">Plant 4 Birthday:</label>
+                    <input type="date" id="plant4birthday" name="plant4birthday">
+                </li>
+                <li>
+                    <h3>Plant 5</h3>
+                    <div class="plant"></div>
+                    <label for="plant5">Plant name:</label><br>
+                    <input type="text" id="plant5name" name="plant5name"><br>
+                    <label for="plant5birthday">Plant 5 Birthday:</label>
+                    <input type="date" id="plant5birthday" name="plant5birthday">
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>

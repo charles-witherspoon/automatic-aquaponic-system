@@ -1,4 +1,4 @@
-<div class="content">
+<!-- <div class="content">
     <div class="header">
         <p class="page-title">Sockets</p>
         <button class="add-plant" mat-raised-button (click)="addSocketType()">Add Socket Type</button>
@@ -46,4 +46,125 @@
         </form>
 
     </div>
-</div>
+</div> -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" />
+<section id="main">
+    <h2>Current Outlet Schedule</h2>
+    <form>
+        <div class="box_timeline_holder">
+            <div class="box_timeline">
+                <ul>
+                    <ng-container *ngFor="let socket of sockets; let i = index;">
+                        <li *ngIf="i < 4">
+                            <!-- Socket Status -->
+                            <div [ngClass]="socket.status === 'ON' ? 'dateOn' : 'dateOff'" class="socket-toggle"
+                                (click)="toggleStatus(socket)">
+                                <span>{{ socket.status }}</span>
+                            </div>
+                            <h3>Socket {{ socket.id }}</h3>
+
+                            <!-- Socket Type -->
+                            <mat-label>Socket Type:</mat-label>
+                            <mat-select (selectionChange)="setType($event, socket)" [value]="socket.type"
+                                class="type-select">
+                                <mat-option *ngFor="let type of types.value" [value]="type">
+                                    <p>{{ type }}</p>
+                                    <mat-icon *ngIf="type !== 'NONE'" class="delete" svgIcon="delete" color="warn"
+                                        (click)="deleteSocketType(type)"></mat-icon>
+                                </mat-option>
+                                <mat-option value="ADD_TYPE" (click)="addSocketType()">Add Type...</mat-option>
+                            </mat-select>
+
+                            <!-- Socket Schedule -->
+                            <!-- <label>Schedule Type</label>
+                            <mat-radio-group [(ngModel)]="socket.scheduleType">
+                                <mat-radio-button [value]="socket.scheduleType">Interval</mat-radio-button>
+                                <mat-radio-button [value]="socket.scheduleType">Custom Range</mat-radio-button>
+                                <mat-radio-button [value]="socket.scheduleType">None</mat-radio-button>
+                            </mat-radio-group> -->
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+        <br><br><br><br>
+        <br><br><br>
+        <div class="box_timeline_holder">
+            <div class="box_timeline">
+                <ul>
+                    <li>
+                        <div class="dateOn">
+                            <span>ON</span>
+                        </div>
+                        <h3>Socket 5</h3>
+                        <label for="SocketName5">Socket name:</label><br>
+                        <input type="text" id="s5name" name="s5name"><br>
+                        <select name="S5Type" id="S5Type">
+                            Type of Socket:<option value="" selected="selected">Click Only</option>
+                            <option value="">Schedule</option>
+                            <option value="">Interval</option>
+                        </select>
+                        <br>
+                        <input type="radio" id="html" name="s5On" value="s5On">
+                        <label for="html">ON</label>
+                        <input type="radio" id="css" name="s5Off" value="s5Off">
+                        <label for="css">OFF</label>
+                    </li>
+                    <li>
+                        <div class="dateOff" color="#FF6347">
+                            <span>OFF</span>
+                        </div>
+                        <h3>Socket 6</h3>
+                        <label for="SocketName6">Socket name:</label><br>
+                        <input type="text" id="s2name" name="s2name"><br>
+                        <select name="S6Type" id="S6Type">
+                            <option value="">Click Only</option>
+                            <option value="" selected="selected">Schedule</option>
+                            <option value="">Interval</option>
+                        </select><br>
+                        <label for="S6Start">Select start time:</label>
+                        <input type="time" id="S6Start" name="S6Start"><br>
+                        <label for="S6Stop">Select stop time:</label><br>
+                        <input type="time" id="S6Stop" name="S6Stop">
+                        <br>
+
+                    </li>
+                    <li>
+                        <div class="dateOff">
+                            <span color="#FF6347">OFF</span>
+                        </div>
+                        <h3>Socket 7</h3>
+                        <label for="SocketName7">Socket name:</label><br>
+                        <input type="text" id="s7name" name="s7name"><br>
+                        <select name="S7Type" id="S7Type">
+                            <option value="">Click Only</option>
+                            <option value="">Schedule</option>
+                            <option value="" selected="selected">Interval</option>
+                        </select><br>
+                        <label for="S7Interval">Intervals per 60 mins :</label>
+                        <input type="range" id="S7Interval" name="S7Interval" min="0" max="60">
+                        <br>
+
+                    </li>
+                    <li>
+                        <div class="dateOff">
+                            <span color="#FF6347">OFF</span>
+                        </div>
+                        <h3>Socket 8</h3>
+                        <label for="SocketName8">Socket name:</label><br>
+                        <input type="text" id="s8name" name="s8name"><br>
+                        <select name="S8Type" id="S8Type">
+                            <option value="">Click Only</option>
+                            <option value="">Schedule</option>
+                            <option value="" selected="selected">Interval</option>
+                        </select><br>
+                        <label for="S8Interval">Intervals per 60 mins :</label>
+                        <input type="range" id="S8Interval" name="S8Interval" min="0" max="60">
+                        <br>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</section>
