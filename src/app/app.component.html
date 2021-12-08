@@ -4,33 +4,39 @@
       <a class="menu_trigger" href="#">menu</a>
       <nav id="nav">
         <ul>
-          <li><a class="active" href="index.html">Home</a></li>
-          <li><a href="myskills.html">Growth Charts</a></li>
-          <li><a href="Contact.html">Settings</a></li>
+          <li><a href="#" [ngClass]="{'active' : content === 'HOME'}" (click)="content = 'HOME'">Home</a></li>
+          <li><a href="#" [ngClass]="{'active' : content === 'GROWTH_DATA'}" (click)="content = 'GROWTH_DATA'">Growth
+              Charts</a></li>
+          <li><a href="#">Settings</a></li>
         </ul>
       </nav>
       <h1 class="logo">Automated Aquaponic Garden</h1>
       <h2 class="slogan">Let's grow something</h2>
     </header>
   </div>
-  <div class="wrapper-holder grey">
-    <!-- Sockets -->
-    <app-sockets></app-sockets>
+  <div *ngIf="content === 'GROWTH_DATA'; else home">
+    <app-growth-data-dashboard></app-growth-data-dashboard>
   </div>
-  <div class="footer-content">
-    <!-- Plants -->
-    <app-growth-data></app-growth-data>
-  </div>
+  <ng-template #home>
+    <div class="wrapper-holder grey">
+      <!-- Sockets -->
+      <app-sockets></app-sockets>
+    </div>
+    <div class="footer-content">
+      <!-- Plants -->
+      <app-growth-data></app-growth-data>
+    </div>
+  </ng-template>
   <footer id="footer">
     <div class="footer-content">
       <br><br><br><br>
       <br><br><br>
       <ul class="social">
-        <li class="email"><a href="#">Email</a></li>
-        <li class="facebook"><a href="#">Facebook</a></li>
-        <li class="google"><a href="#">Google+</a></li>
-        <li class="twitter"><a href="#">Twitter</a></li>
-        <li class="pinterest"><a href="#">Pinterest</a></li>
+        <li class="email"><a href="#"></a></li>
+        <li class="facebook"><a href="#"></a></li>
+        <li class="google"><a href="#"></a></li>
+        <li class="twitter"><a href="#"></a></li>
+        <li class="pinterest"><a href="#"></a></li>
       </ul>
       <p class="copy">Copyright 2021 Wright State Group 11 (DK) All rights reserved.</p>
     </div>

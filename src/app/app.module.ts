@@ -17,6 +17,7 @@ import { SetScheduleDialogComponent } from './components/set-schedule-dialog/set
 import { HeaderComponent } from './components/header/header.component';
 import { EditPlantDialogComponent } from './components/edit-plant-dialog/edit-plant-dialog.component';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { GrowthDataDashboardComponent } from './components/growth-data-dashboard/growth-data-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     SetScheduleDialogComponent,
     HeaderComponent,
     EditPlantDialogComponent,
+    GrowthDataDashboardComponent,
   ],
   imports: [
     BrowserModule,

@@ -12,8 +12,7 @@ export class AppComponent {
 
 
 
-  content = 'SOCKETS';
-  // content = 'GROWTH_DATA';
+  content = 'HOME';
 
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {

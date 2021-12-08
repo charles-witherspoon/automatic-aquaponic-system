@@ -229,16 +229,17 @@ h2.slogan{
 	overflow:hidden;
 	margin: 0 auto 45px;
 	width: 670px;
+	display: flex;
+	align-content: center;
+	justify-content: center;
 }
 .footer-content .social li{
-	float:left;
-	margin: 0 0 0 10px;
+	margin: 0 0.5rem;
 	border-radius: 50%;
 	behavior: url(css/PIE.htc);
-	text-indent: -9999px;
 	background: #c6cfc9;
-	width: 123px;
-	height: 123px;
+	width: 75px;
+	height: 75px;
 	position:relative;
 	display: table;
 }
