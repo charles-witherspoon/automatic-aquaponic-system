@@ -4,14 +4,16 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json');
 
-class Socket implements JsonSerializable {
+class Socket implements JsonSerializable
+{
     private $_id;
     private $_type;
     private $_schedule;
     private $_status;
     private $_scheduleType;
 
-    public function __construct($id, $type, $schedule, $status, $scheduleType) {
+    public function __construct($id, $type, $schedule, $status, $scheduleType)
+    {
         $this->_id = $id;
         $this->_type = $type;
         $this->_schedule = $schedule;
@@ -19,7 +21,8 @@ class Socket implements JsonSerializable {
         $this->_scheduleType = $scheduleType;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'id' => $this->_id,
             'type' => $this->_type,
@@ -30,48 +33,59 @@ class Socket implements JsonSerializable {
     }
 
 
-    public function getId() {
+    public function getId()
+    {
         return $this->_id;
     }
 
-    public function setType($type) {
+    public function setType($type)
+    {
         $this->_type = $type;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->_type;
     }
 
-    public function setScheduleType($scheduleType) {
+    public function setScheduleType($scheduleType)
+    {
         $this->_scheduleType = $scheduleType;
     }
-    
-    public function getScheduleType() {
+
+    public function getScheduleType()
+    {
         return $this->_scheduleType;
     }
 
-    public function setSchedule($schedule) {
+    public function setSchedule($schedule)
+    {
         $this->_schedule = $schedule;
     }
 
-    public function getSchedule() {
+    public function getSchedule()
+    {
         return $this->_schedule;
     }
 
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->_status = $status;
     }
 
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->_status;
     }
 }
 
-class SocketDataAccess {
+class SocketDataAccess
+{
 
     private $_db;
 
-    public function __construct(SQLite3 $db) {
+    public function __construct(SQLite3 $db)
+    {
         $this->_db = $db;
         // Create sockets table if necessary
         $db->exec("CREATE TABLE IF NOT EXISTS sockets(id INTEGER PRIMARY KEY, type TEXT, scheduleType TEXT, status TEXT);");
@@ -83,7 +97,8 @@ class SocketDataAccess {
         }
     }
 
-    public function getSockets() {
+    public function getSockets()
+    {
         $sockets = [];
 
         $result = $this->_db->query('SELECT * FROM sockets;');
@@ -94,8 +109,9 @@ class SocketDataAccess {
 
         return $sockets;
     }
-    
-    public function getSocket($id) {
+
+    public function getSocket($id)
+    {
         $statement = $this->_db->prepare('SELECT * FROM sockets WHERE id = :id;');
         $statement->bindValue(':id', $id);
 
@@ -107,8 +123,9 @@ class SocketDataAccess {
 
         return null;
     }
-    
-    public function updateSocket($update) {
+
+    public function updateSocket($update)
+    {
         // Save to database
         $statement = $this->_db->prepare('UPDATE sockets SET type = :type, scheduleType = :scheduleType, status = :status WHERE id = :id;');
         $statement->bindValue(':id', $update->id);
@@ -121,13 +138,14 @@ class SocketDataAccess {
         // Call Perl script to update socket status
         $id = $update->id;
         $status = ($update->status == 'OFF') ? 0 : 1;
-        $command = "turnsocket.pl $id $status";
+        $command = "turnsocket.py $id $status";
         shell_exec($command);
     }
 }
 
 
-function handleGet($socketDB) {
+function handleGet($socketDB)
+{
     // GET: Get all sockets
     if (empty($_GET)) {
         $sockets = $socketDB->getSockets();
@@ -141,7 +159,8 @@ function handleGet($socketDB) {
     }
 }
 
-function handlePost($socketDB) {
+function handlePost($socketDB)
+{
     // POST: Update socket
     $json = file_get_contents('php://input');
 

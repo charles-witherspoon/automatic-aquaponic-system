@@ -55,8 +55,8 @@ export class EditPlantDialogComponent implements OnInit {
     this.growthData()['controls'].forEach(control => {
       const date = control.get('date')?.value;
       const growth = control.get('growth')?.value;
-      if (date && growth) {
-        const growthData: GrowthData = { date: date, growth: growth };
+      if (date && growth && this.plant.id) {
+        const growthData: GrowthData = { plantId: this.plant.id, date: date, growth: growth };
         plantData.push(growthData);
         if (!this.plant.growthData)
           this.plant.growthData = [];
@@ -65,9 +65,7 @@ export class EditPlantDialogComponent implements OnInit {
     });
 
 
-    plantData.forEach(pd => {
-      this.plantService.updatePlant(`${this.plant.id}`, pd);
-    })
+    this.plantService.addGrowthData(plantData);
 
     this.refreshGrowthData();
     this.growthData()['controls'] = [];
@@ -90,10 +88,10 @@ export class EditPlantDialogComponent implements OnInit {
     }
   }
 
-  public deleteGrowthData(element: any): void {
-    this.plant.growthData = this.plant.growthData.filter(data => data !== element);
+  public deleteGrowthData(growthData: GrowthData): void {
+    this.plant.growthData = this.plant.growthData.filter(data => data.id !== growthData.id);
 
-    // TODO: Update PHP file to delete growth data
+    this.plantService.deleteGrowthData(growthData.id || 0);
   }
 
   public removeFormField(index: number): void {

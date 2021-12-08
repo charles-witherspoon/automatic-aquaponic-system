@@ -8,7 +8,8 @@
     <!-- Growth Data -->
     <mat-tab-group>
         <mat-tab label="Chart">
-            <div *ngIf="plant.growthData" echarts [options]="chartOption" class="chart"></div>
+            <div *ngIf="plant.growthData && plant.growthData.length > 0" echarts [options]="chartOption" class="chart">
+            </div>
         </mat-tab>
         <mat-tab label="Data">
             <div class="data-container">
@@ -64,4 +65,5 @@
         <button class="save-data" mat-raised-button *ngIf="growthData().length > 0" type="submit">Save Growth
             Data</button>
     </form>
+    <br>
 </div>

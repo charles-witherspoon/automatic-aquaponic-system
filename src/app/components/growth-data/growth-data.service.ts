@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, mergeMap, forkJoin } from 'rxjs';
 import { GrowthData, Plant } from 'src/app/models/plants';
 
 @Injectable({
@@ -8,9 +8,11 @@ import { GrowthData, Plant } from 'src/app/models/plants';
 })
 export class GrowthDataService {
 
-  // private readonly GROWTH_DATA_URL: string = 'http://charlesraspi/plants';
+  // private readonly PLANTS_URL: string = 'http://charlesraspi/plants';
 
-  private readonly GROWTH_DATA_URL: string = 'http://localhost/plants';
+  private readonly PLANTS_URL: string = 'http://localhost/plants';
+
+  private readonly GROWTH_DATA_URL: string = 'http://localhost/growth-data';
 
   private plants: Subject<Plant[]> = new Subject();
 
@@ -21,28 +23,18 @@ export class GrowthDataService {
     return this.plants;
   }
 
-  public fetchPlants(): void {
-    this.http.get<Plant[]>(this.GROWTH_DATA_URL)
-      .subscribe(plants => {
-        plants.forEach(plant => {
-          if (plant.growthData) {
-            const growthDataString: any = plant.growthData;
-            const growthData: string[] = growthDataString.split('|');
-            const plantData: GrowthData[] = growthData.map(data => JSON.parse(data));
-            plant.growthData = plantData;
-          }
-        })
-        this.plants.next(plants)
-      });
+  public fetchPlants() {
+    this.http.get<Plant[]>(this.PLANTS_URL)
+      .subscribe(plants => this.plants.next(plants));
   }
 
   public addPlant(name: string): void {
-    this.http.post(`${this.GROWTH_DATA_URL}`, { name: name }).subscribe(_ => this.fetchPlants());
+    this.http.post(`${this.PLANTS_URL}`, { name: name }).subscribe(_ => this.fetchPlants());
   }
 
   public deletePlant(id: number): void {
     let params: HttpParams = new HttpParams().set('id', id);
-    this.http.delete(this.GROWTH_DATA_URL, { params: params }).subscribe(_ => this.fetchPlants());
+    this.http.delete(this.PLANTS_URL, { params: params }).subscribe(_ => this.fetchPlants());
   }
 
   public updatePlant(id: number | string, data: GrowthData): void {
@@ -51,9 +43,16 @@ export class GrowthDataService {
       growthData: data
     }
 
-    console.log(update);
-
-    this.http.post<any>(this.GROWTH_DATA_URL, update)
+    this.http.post<any>(this.PLANTS_URL, update)
       .subscribe();
+  }
+
+  public addGrowthData(data: GrowthData[]): void {
+    this.http.post<any>(this.GROWTH_DATA_URL, data).subscribe();
+  }
+
+  public deleteGrowthData(id: number): void {
+    let params: HttpParams = new HttpParams().set('id', id);
+    this.http.delete(this.GROWTH_DATA_URL, { params: params }).subscribe(_ => this.fetchPlants());
   }
 }

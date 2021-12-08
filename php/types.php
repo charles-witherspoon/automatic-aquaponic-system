@@ -4,16 +4,19 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json');
 
-class Type implements JsonSerializable {
+class Type implements JsonSerializable
+{
     private $_id;
     private $_value;
 
-    public function __construct($id, $value) {
+    public function __construct($id, $value)
+    {
         $this->_id = $id;
         $this->_value = $value;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'id' => $this->_id,
             'value' => $this->_value
@@ -21,10 +24,12 @@ class Type implements JsonSerializable {
     }
 }
 
-class TypeDataAccess {
+class TypeDataAccess
+{
     private $_db;
 
-    public function __construct(SQLITE3 $db) {
+    public function __construct(SQLITE3 $db)
+    {
         $this->_db = $db;
 
         // Create types table if necessary
@@ -37,7 +42,8 @@ class TypeDataAccess {
         }
     }
 
-    public function getTypes() {
+    public function getTypes()
+    {
         $types = [];
 
         $result = $this->_db->query('SELECT * FROM types;');
@@ -49,32 +55,37 @@ class TypeDataAccess {
         return $types;
     }
 
-    public function addType($type) {
+    public function addType($type)
+    {
         $statement = $this->_db->prepare('INSERT INTO types(value) VALUES (:type);');
         $statement->bindValue(':type', $type);
         $statement->execute();
     }
 
-    public function deleteType($id) {
+    public function deleteType($id)
+    {
         $statement = $this->_db->prepare('DELETE FROM types WHERE id = :id;');
         $statement->bindValue(':id', $id);
         $statement->execute();
     }
 }
 
-function handleGet($typesDB) {
+function handleGet($typesDB)
+{
     $types = $typesDB->getTypes();
     echo json_encode($types);
 }
 
-function handlePost($typesDB) {
+function handlePost($typesDB)
+{
     $json = file_get_contents('php://input');
     $type = json_decode($json);
 
     $typesDB->addType($type->value);
 }
 
-function handleDelete($typesDB) {
+function handleDelete($typesDB)
+{
     $id = $_REQUEST['id'];
     $typesDB->deleteType($id);
     echo $id;
@@ -89,9 +100,9 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         handleGet($typesDB);
     }
-    
+
     // Handle POST
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         handlePost($typesDB);
     }
 
@@ -99,7 +110,6 @@ try {
     elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         handleDelete($typesDB);
     }
-
 } catch (Exception $e) {
     echo 'Caught exception: ', $e->getMessage(), "\n";
 } finally {

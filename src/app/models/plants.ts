@@ -1,6 +1,8 @@
 export interface GrowthData {
+    id?: number,
+    plantId: number,
     date: string,
-    growth: number
+    growth: number,
 }
 
 export interface Plant {

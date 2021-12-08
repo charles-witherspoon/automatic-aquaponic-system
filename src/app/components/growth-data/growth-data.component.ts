@@ -124,6 +124,7 @@ export class GrowthDataComponent implements OnInit {
         if (plant.growthData && plant.id) {
           this.chartOptions.set(plant.id, this.getChartOptions(plant));
         }
+
       });
 
     });

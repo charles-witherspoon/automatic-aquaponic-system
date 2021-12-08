@@ -57,7 +57,9 @@
                                             (change)="setIntervalUnit(intervalSlider, 'Hours')">Hours
                                         </mat-radio-button>
                                     </mat-radio-group>
-                                    <button mat-raised-button class="interval-btn">Save Interval</button>
+                                    <button mat-raised-button class="interval-btn"
+                                        (click)="saveInterval(socket.id || -1)">Save
+                                        Interval</button>
                                 </div>
                             </div>
                         </li>

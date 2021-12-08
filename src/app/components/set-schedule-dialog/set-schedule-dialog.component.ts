@@ -76,6 +76,8 @@ export class SetScheduleDialogComponent implements OnInit {
       return;
     }
 
+    this.socketService.clearSchedules(this.data.id);
+
     const dayString: string = this.getDayString();
 
     let cronAndStatus: [string, number][] = [];
@@ -114,7 +116,7 @@ export class SetScheduleDialogComponent implements OnInit {
     const minute: number = Number(timeStringParts[1]);
     const day: string = dayString ? dayString : '*';
 
-    const cronString: string = `0 ${minute} ${hour} * * ${day} *`;
+    const cronString: string = `${minute} ${hour} * * ${day}`;
 
     return cronString;
   }

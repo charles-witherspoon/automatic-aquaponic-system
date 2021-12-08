@@ -5,19 +5,21 @@ header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json');
 
 
-class Schedule implements JsonSerializable {
+class Schedule implements JsonSerializable
+{
     private $_id;
     private $_cronString;
     private $_socketId;
 
-    public function __construct($id, $cronString, $socketId) {
+    public function __construct($id, $cronString, $socketId)
+    {
         $this->_id = $id;
         $this->_cronString = $cronString;
         $this->_socketId = $socketId;
-
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return [
             'id' => $this->_id,
             'cronString' => $this->_cronString,
@@ -26,17 +28,20 @@ class Schedule implements JsonSerializable {
     }
 }
 
-class ScheduleDataAccess {
+class ScheduleDataAccess
+{
     private $_db;
 
-    public function __construct(SQLITE3 $db) {
+    public function __construct(SQLITE3 $db)
+    {
         $this->_db = $db;
 
         // Create schedules table if necessary
         $db->exec("CREATE TABLE IF NOT EXISTS schedules(id INTEGER PRIMARY KEY, cronString TEXT, socketId INTEGER, FOREIGN KEY(socketId) REFERENCES sockets(id));");
     }
 
-    public function getSchedules() {
+    public function getSchedules()
+    {
         $schedules = [];
 
         $result = $this->_db->query('SELECT * FROM schedules;');
@@ -48,7 +53,8 @@ class ScheduleDataAccess {
         return $schedules;
     }
 
-    public function addSchedule($schedule) {
+    public function addSchedule($schedule)
+    {
         // Update database
         $statement = $this->_db->prepare('INSERT INTO schedules(cronString, socketId) VALUES (:cronString, :socketId);');
         $statement->bindValue(':cronString', $schedule->cronString);
@@ -59,25 +65,48 @@ class ScheduleDataAccess {
         $id = $schedule->socketId;
         $status = $schedule->onStatus;
         $cronStr = $schedule->cronString;
-        $command = "(crontab -l 2>/dev/null; echo \"$cronStr ./turnsocket.pl $id $status\") | sort -u | crontab -";
+        $command = "(crontab -l 2>/dev/null; echo \"$cronStr ./turnsocket.py $id $status\") | sort -u | crontab -";
+        exec($command);
+    }
+
+    public function clearSchedules($socketId)
+    {
+        // Update database
+        $statement = $this->_db->prepare('DELETE FROM schedules WHERE socketId = :socketId');
+        $statement->bindValue(':socketId', $socketId);
+        $statement->execute();
+
+        // Remove cron jobs
+        $command = "crontab -l | grep -v 'turnsocket.py $socketId'  | crontab -";
         exec($command);
     }
 }
 
 
-function handleGet($schedulesDB) {
+function handleGet($schedulesDB)
+{
     $schedules = $schedulesDB->getSchedules();
     echo json_encode($schedules);
 }
 
-function handlePost($schedulesDB) {
+function handlePost($schedulesDB)
+{
     $json = file_get_contents('php://input');
     $schedule = json_decode($json);
 
     $schedulesDB->addSchedule($schedule);
 }
 
-$db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
+function handleDelete($schedulesDB)
+{
+    $id = $_REQUEST['id'];
+
+    $schedulesDB->clearSchedules($id);
+}
+
+// $db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
+$db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
+
 $db->busyTimeout(3000);
 $schedulesDB = new ScheduleDataAccess($db);
 
@@ -88,8 +117,13 @@ try {
     }
 
     // Handle POST
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         handlePost($schedulesDB);
+    }
+
+    // Handle DELETE
+    elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        handleDelete($schedulesDB);
     }
 } catch (Exception $e) {
     echo 'Caught exception: ', $e->getMessage(), "\n";

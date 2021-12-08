@@ -15,7 +15,7 @@
                             (click)="deletePlant(plant.id, plant.name)">
                         </mat-icon>
                     </div>
-                    <div class="chart-container" *ngIf="plant.growthData && plant.id">
+                    <div class="chart-container" *ngIf="plant.growthData && plant.growthData.length > 0">
                         <label class="chart-label">Growth (cm)</label>
                         <div echarts [options]="chartOptions.get(plant.id) || {}" class="chart"></div>
                     </div>

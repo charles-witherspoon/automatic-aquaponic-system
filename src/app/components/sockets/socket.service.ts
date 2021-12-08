@@ -93,6 +93,11 @@ export class SocketService {
   public addSchedule(cronString: string, socketId: number, status: number) {
     this.http.post<any>(this.SCHEDULES_URL, { cronString: cronString, socketId: socketId, onStatus: status }).subscribe();
   }
+
+  public clearSchedules(id: number) {
+    let params: HttpParams = new HttpParams().set('id', id);
+    this.http.delete(this.SCHEDULES_URL, { params: params }).subscribe();
+  }
   //#endregion
 
 }

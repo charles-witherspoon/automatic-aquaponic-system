@@ -54,11 +54,6 @@ export class SocketsComponent implements OnInit {
         sockets.push(this.addSocketGroup(socket));
       })
 
-      console.log(sockets);
-    });
-
-    this.socketService.getSchedules().subscribe(schedules => {
-      console.log(schedules);
     });
   }
 
@@ -119,8 +114,6 @@ export class SocketsComponent implements OnInit {
     const select: HTMLSelectElement = $event as HTMLSelectElement;
     if (select.value === 'ADD_TYPE')
       this.addSocketType();
-    else
-      console.log(select.value);
   }
 
   public toggleStatus(socket: Socket) {
@@ -147,5 +140,27 @@ export class SocketsComponent implements OnInit {
     slider.value = 1;
     this._intervalValue = 1;
     this.intervalUnit = unit;
+  }
+
+  public saveInterval(id: number): void {
+    if (this._intervalValue <= 0)
+      return;
+
+    this.socketService.clearSchedules(id);
+
+    let min = '0';
+    let hr = '*';
+
+    if (this.intervalUnit === 'MINUTE') {
+      min = `*/${this._intervalValue}`
+    }
+    else {
+      hr = `*/${this._intervalValue}`
+    }
+
+    let cronExpr = `${min} ${hr} * * *`;
+
+    console.log(cronExpr);
+    this.socketService.addSchedule(cronExpr, id, -1);
   }
 }
