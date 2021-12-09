@@ -89,7 +89,7 @@ export class EditPlantDialogComponent implements OnInit {
   }
 
   public deleteGrowthData(growthData: GrowthData): void {
-    this.plant.growthData = this.plant.growthData.filter(data => data.id != growthData.id);
+    this.plant.growthData = this.plant.growthData.filter(data => data.id !== growthData.id);
 
     this.plantService.deleteGrowthData(growthData.id || 0);
 
