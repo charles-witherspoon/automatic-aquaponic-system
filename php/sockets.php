@@ -174,7 +174,7 @@ function handlePost($socketDB)
 
 
 // $db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
-$db = new SQLite3('/mnt/c/dev/repos/senior-design/automatic-aquaponic-system/db/automatic-aquaponic-system.db');
+$db = new SQLite3('/home/pi/db/automatic-aquaponic-system.db');
 $db->busyTimeout(3000);
 $socketDB = new SocketDataAccess($db);
 
