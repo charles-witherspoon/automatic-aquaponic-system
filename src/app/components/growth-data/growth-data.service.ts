@@ -10,9 +10,9 @@ export class GrowthDataService {
 
   // private readonly PLANTS_URL: string = 'http://charlesraspi/plants';
 
-  private readonly PLANTS_URL: string = 'http://localhost/plants';
+  private readonly PLANTS_URL: string = 'http://raspberrypi/plants';
 
-  private readonly GROWTH_DATA_URL: string = 'http://localhost/growth-data';
+  private readonly GROWTH_DATA_URL: string = 'http://raspberrypi/growth-data';
 
   private plants: Subject<Plant[]> = new Subject();
 

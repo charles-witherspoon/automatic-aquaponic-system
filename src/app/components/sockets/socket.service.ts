@@ -14,11 +14,11 @@ export class SocketService {
 
   // private readonly SCHEDULES_URL: string = 'http://charlesraspi/schedules';
 
-  private readonly SOCKETS_URL: string = 'http://localhost/sockets';
+  private readonly SOCKETS_URL: string = 'http://raspberrypi/sockets';
 
-  private readonly TYPES_URL: string = 'http://localhost/types';
+  private readonly TYPES_URL: string = 'http://raspberrypi/types';
 
-  private readonly SCHEDULES_URL: string = 'http://localhost/schedules';
+  private readonly SCHEDULES_URL: string = 'http://raspberrypi/schedules';
 
   private sockets: Subject<Socket[]> = new Subject();
 
